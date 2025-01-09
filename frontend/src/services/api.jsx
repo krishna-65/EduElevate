@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/v1"
+const BASE_URL = "https://eduelevate-myp8.onrender.com"
 
 // AUTH ENDPOINTS
 export const authEndpoints = {
