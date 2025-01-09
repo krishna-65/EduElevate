@@ -34,6 +34,7 @@ app.use(
         credentials:true,
     })
 )
+
 app.use(
     fileUpload(
         {
@@ -45,7 +46,6 @@ app.use(
 
 //cloudinary connection
 cloudinaryConnect();
-
 
 //routes
 app.use('/api/v1/auth',userRoutes);
@@ -62,4 +62,5 @@ app.use('/api/v1/payment', paymentRoutes);
 app.listen(PORT,()=>{
     console.log(`Server running on port ${PORT}`);
 })
+
 
