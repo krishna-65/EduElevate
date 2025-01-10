@@ -64,7 +64,7 @@ const MyProfile = () => {
                 {/* Section 2 */}
                 <motion.div
                     variants={containerVariants}
-                    className="p-5 m-3 bg-[#161515] shadow rounded-md flex sm:flex-row flex-col gap-3 items-center justify-between"
+                    className="p-5 my-3 bg-[#161515] shadow rounded-md flex sm:flex-row flex-col gap-3 items-center justify-between"
                 >
                     <div>
                         <h3 className="text-md mb-1 font-semibold text-center sm:text-left">About</h3>
@@ -85,7 +85,7 @@ const MyProfile = () => {
                 {/* Section 3 */}
                 <motion.div
                     variants={containerVariants}
-                    className="p-5 m-3 bg-[#161515] shadow rounded-md flex flex-col justify-between"
+                    className="p-5 my-3 bg-[#161515] shadow rounded-md flex flex-col justify-between"
                 >
                     <div className="flex sm:flex-row flex-col gap-3 justify-between">
                         <h3 className="text-md font-semibold">Personal Details</h3>

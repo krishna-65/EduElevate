@@ -7,15 +7,16 @@ import { FcGoogle } from "react-icons/fc";
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../services/operations/authAPI';
 import { enqueueSnackbar } from 'notistack';
+import Loader from './common/Loader';
 const LoginComponent = ({backgroundColor,textColor}) => {
 
     useEffect(()=>{
         Aos.init({duration:1000})
     },[])
-
+    const {loading} = useSelector((state)=>state.auth);
     const [mousePos,setMousePos] = useState({x: 0, y: 0});
     const [isHovering, setIsHovering] = useState(false);
 
@@ -56,6 +57,10 @@ const LoginComponent = ({backgroundColor,textColor}) => {
             e.preventDefault();
             console.log(formData)
            dispatch(login(formData,navigate,enqueueSnackbar))
+        }
+
+        if(loading){
+            return <Loader/>
         }
 
   return (
