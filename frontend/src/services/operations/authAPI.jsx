@@ -83,7 +83,7 @@ export const login = (formData, navigate, enqueueSnackbar) => {
       try {
         const { email, password } = formData;
         // Send request to backend API for login
-        const response = await apiConnector('POST',"https://eduelevate-myp8.onrender.com/api/v1/auth/login", {
+        const response = await apiConnector('POST',authEndpoints.LOGIN_API, {
           email,
           password
         },);

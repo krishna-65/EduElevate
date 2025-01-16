@@ -18,11 +18,12 @@ router.put('/editCourse',auth,isInstructor,editCourse);
 router.put('/makePublic', auth, isInstructor, makeCoursePublic)
 
 router.get('/getAllCourses',showAllCourse);
-router.post('/getCourseDetails',getAlldetails);
+router.get('/getCourseDetails',getAlldetails);
 
-
+// router.post('/createCategory',createCategory);
 router.get('/showAllCategories',showCategory);
-router.post('/getCategoryPageDetails',categoryPageDetails);
+router.get('/getCategoryPageDetails',categoryPageDetails);
+
 
 
 router.post('/getInstructorCourses',auth,isInstructor,getInstructorCourses);

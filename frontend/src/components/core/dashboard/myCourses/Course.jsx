@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Aos from "aos";
+import { Link } from "react-router-dom";
 const Course = ({course,handleEdit})=>{
     useEffect(()=>{
         Aos.init({duration:1000})
@@ -11,11 +12,17 @@ const Course = ({course,handleEdit})=>{
                 <div className="p-3">
                 <h2 className="text-xl font-semibold ">{course.courseName}</h2>
                 <p className="text-sm">{course.courseDescription}</p>
+                <p className="text-sm text-teal-600">{course.status}</p>
             </div>
             </div>
            
             <div className="flex p-3 flex-col gap-5 justify-center ">
-                <button className="px-9 py-2 bg-yellow-400 text-gray-600 font-semibold rounded hover:scale-95 transition-all duration-200">View</button>
+                <Link
+                        to={`/catalog/${course.category.name
+                            .split(" ")
+                            .join("-")
+                            .toLowerCase()}/${course._id}`}
+                         className="px-9 py-2 bg-yellow-400 text-gray-600 font-semibold rounded hover:scale-95 transition-all duration-200">View</Link>
                 <button 
                   onClick={() => handleEdit(course)}
                 className="px-9 py-2 bg-blue-400 text-gray-100 font-semibold rounded hover:scale-95 transition-all duration-200">Edit</button>

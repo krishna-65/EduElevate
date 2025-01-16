@@ -3,6 +3,7 @@ import { apiConnector } from "../api-connector";
 import { profileEndpoints, settingsEndpoints } from "../api";
 import { setCourseEntireData } from "../../store/reducers/viewCourse-reducers";
 import { setUser } from "../../store/reducers/profile-reducers";
+import { setCourse } from "../../store/reducers/course-reducers";
 
 export const getUserEnrolledCourse = (token,enq) => {
     return async(dispatch)=>{
@@ -30,6 +31,7 @@ export const getInstructorData = async(enqueueSnackbar) => {
             const response = await apiConnector('GET', profileEndpoints.GET_INSTRUCTOR_DATA_API,null)
             result = response?.data?.courses;
             console.log(response?.data)
+            setCourse(result);
             return result;
         }catch(error){
         console.log("GET_INSTRUCTOR_DATA_API Error",error);

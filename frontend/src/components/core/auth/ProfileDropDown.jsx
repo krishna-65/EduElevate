@@ -8,9 +8,10 @@ import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../../common/ConfirmationModal";
 import { useSnackbar } from "notistack";
 const ProfileDropDown = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [confirmationModal, setConfirmationModal] = useState(null);
   const {enqueueSnackbar} =useSnackbar();
+
   const handleOnClick = () => {
     setIsOpen(!isOpen);
   };

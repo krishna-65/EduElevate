@@ -19,7 +19,7 @@ const RequirementFields = (
 
     useEffect(()=>{
         if(editCourse){
-            setRequirements(course?.instructions);
+            setRequirements(JSON.parse(course?.instructions));
         }
 
     },[])

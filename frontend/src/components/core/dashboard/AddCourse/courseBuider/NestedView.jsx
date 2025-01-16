@@ -63,8 +63,8 @@ const NestedView = ({ handleChangedEditSection }) => {
         <div>
             <div className="mt-10 rounded px-8 py-4">
                 {course?.courseContent?.map((section) => (
-                    <details  key={section._id} open>
-                        <summary className="flex items-center justify-between gap-x-3 border-b-2">
+                    <details  key={section._id} open className="flex flex-col  mt-10">
+                        <summary className="flex items-center justify-between gap-x-4 border-b-2">
                             <div className="flex items-center gap-x-3">
                                 <RxDropdownMenu />
                                 <p>{section.sectionName}</p>
@@ -163,6 +163,7 @@ const NestedView = ({ handleChangedEditSection }) => {
                 <SubSectionModal
                     modalData={viewSubSection}
                     setModalData={setViewSubSection}
+                    setAddSubSection = {setAddSubSection}
                     add={true}
                 />
             )}

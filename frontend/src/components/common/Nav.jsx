@@ -11,6 +11,8 @@ import { apiConnector } from '../../services/api-connector';
 import { categories } from '../../services/api';
 import { IoIosArrowDropdown } from "react-icons/io";
 import { setCategory } from '../../store/reducers/category-reducer';
+import { logout } from '../../services/operations/authAPI';
+import ConfirmationModal from './ConfirmationModal';
 
 const Navbar = () => {
   const [hasShadow, setHasShadow] = useState(false);
@@ -19,6 +21,7 @@ const Navbar = () => {
   const { isauthenticate} = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.profile);
   const { totalItems } = useSelector((state) => state.cart);
+  const [confirmationModal, setConfirmationModal] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -56,7 +59,8 @@ const Navbar = () => {
   };
 
   const location = useLocation();
-  const matchRoute = (route) => route === location.pathname;
+ console.log(location.pathname.split('/')[1]);
+  const matchRoute = (route) => route===`/${location.pathname.split('/')[1]}`;
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 bg-[#0f0f0f] transition-shadow duration-300 ${hasShadow ? 'shadow-lg shadow-[#6674CC]' : ''}`}>
@@ -110,10 +114,10 @@ const Navbar = () => {
           </nav>
 
           {/* Cart and Profile */}
-          <div className="hidden md:flex space-x-4 items-center">
+          <div className="md:flex hidden space-x-4 items-center">
             {isauthenticate && user.accountType !== "Instructor" && (
               <Link to="/dashboard/cart" className="relative">
-                <FaShoppingCart  className='text-xl'/>
+                <FaShoppingCart  className='bg-red-600'/>
                 {totalItems > 0 && (
                   <div className="absolute top-0 right-0 px-2 py-1 text-xs text-white bg-[#6674CC] rounded-full">
                     {totalItems}
@@ -136,20 +140,42 @@ const Navbar = () => {
               </svg>
             </button>
           </div>
-        </div>
+        </div>    
+      </div>
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+          <div className="md:hidden mt-4 flex flex-col space-y-4 bg-transparent p-4 rounded-lg  md:w-[300px] bg-gradient-to-br from-white/40 to-gray-300/20 backdrop-blur-2xl shadow-2xl border border-gray-100/50 transition-all duration-200">
+            <Link to="/" className="text-center  text-gray-50 hover:text-[#6674CC] transition-all duration-200 font-semibold">Home</Link>
+            <a onClick={()=>setIsMobileMenuOpen(!isMobileMenuOpen)}  href="#courses" className="  text-center font-semibold text-gray-50 hover:text-[#6674CC] transition-all duration-200">Courses</a>
+            <Link to="/about" className="text-center font-semibold text-gray-50 hover:text-[#6674CC] transition-all duration-200">About</Link>
+            <Link to="/contact" className=" text-center font-semibold text-gray-50 hover:text-blue-600 transition-all duration-200">Contact</Link>
+            <Link to="/signup" className={`${isauthenticate?"hidden":""} my-10 px-4 py-2 border-2 border-[#6674CC] text-white rounded hover:bg-blue-700 text-center hover:scale-95 transition-all duration-200 `}>Sign Up</Link>
+            {isauthenticate&&
+            <div className='flex justify-center gap-3 items-center mr-10'>
+              <div className='pointer-events-none'><ProfileDropDown/></div>
+              <Link to='/dashboard/my-profile'>Profile</Link>
+              </div>
+              }
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 flex flex-col space-y-4 bg-[#0f0f0f] p-4 rounded-lg">
-            <Link to="/" className="text-gray-50 hover:text-[#6674CC] transition-all duration-200 font-semibold">Home</Link>
-            <a href="#courses" className="font-semibold text-gray-50 hover:text-[#6674CC] transition-all duration-200">Courses</a>
-            <a href="#about" className="font-semibold text-gray-50 hover:text-[#6674CC] transition-all duration-200">About</a>
-            <a href="#contact" className="font-semibold text-gray-50 hover:text-blue-600 transition-all duration-200">Contact</a>
-            <a href="/signup" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-center">Sign Up</a>
+        <button
+            onClick={() =>
+              setConfirmationModal({
+                text1: "Are you sure?",
+                text2: "You will be logged out of your account.",
+                btn1Text: "Logout",
+                btn2Text: "Cancel",
+                btn1Handler: () => dispatch(logout(navigate)),
+                btn2Handler: () => setConfirmationModal(null),
+              })
+            
+              } className=" text-sm px-5 hover:scale-95 transition-all duration-200 py-2 bg-red-300 text-center  rounded-md  text-red-600 hover:text-red-800">
+            Logout
+                  </button>
           </div>
         )}
-      </div>
+         {confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}
     </nav>
+   
   );
 };
 

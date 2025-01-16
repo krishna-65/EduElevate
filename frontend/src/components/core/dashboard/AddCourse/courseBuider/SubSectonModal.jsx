@@ -8,7 +8,7 @@ import { setCourse } from "../../../../../store/reducers/course-reducers";
 import { enqueueSnackbar } from "notistack";
 import Loader from "../../../../common/Loader";
 
-const SubSectionModal = ({modalData,view=null,edit=null}) => {
+const SubSectionModal = ({modalData,view=null,edit=null, setAddSubSection}) => {
     const {
          register,
          handleSubmit,
@@ -20,13 +20,14 @@ const SubSectionModal = ({modalData,view=null,edit=null}) => {
     const dispatch = useDispatch();
     const [loading,setLoading] = useState(false);
     const {course,editCourse} = useSelector((state) => state.course);
-    console.log("modal",modalData)
+   
 
     useEffect(()=>{
         if(view || edit){
             setValue("lectureTitle", modalData.title);
             setValue("lectureDescription", modalData.description);
             setValue("lectureVideo", modalData.videoUrl);
+            setValue("timeDuration", modalData.timeDuration || 0);
         }
     },[])
 
@@ -34,7 +35,8 @@ const SubSectionModal = ({modalData,view=null,edit=null}) => {
         const currentValue = getValues();
         if(currentValue.lectureTitle !== modalData.lectureTitle ||
             currentValue.lectureDescription !== modalData.lectureDescription ||
-            currentValue.lectureVideo !== modalData.videoUrl
+            currentValue.lectureVideo !== modalData.videoUrl ||
+            currentValue.timeDuration!== modalData.timeDuration 
         ){
             return true;
         }else{
@@ -75,19 +77,24 @@ const SubSectionModal = ({modalData,view=null,edit=null}) => {
                 const updatedSection = await createSubSection(formData,enqueueSnackbar);
                 const updatedCourseContent = course.courseContent.map((section)=>section._id === modalData.sectionId? result : section) 
                 dispatch(setCourse({...course, courseContent: updatedCourseContent}));
+               
                 setLoading(false);
+                setAddSubSection(null);
             }
     }
 if(loading){
-    return <Loader/>
+    return <Loader className={`overflow-hidden absolute top-0 left-0 w-full h-screen flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm z-50`}/>
 }
 
 
    return (
-    <div className="relative top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
+    <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
 
             <div className="bg-[#0f0f0f] p-10 rounded">
-                <h1 className="text-lg font-semibold">Add Lecture</h1>
+               <div className="flex justify-between">
+                 <h1 className="text-lg font-semibold">Add Lecture</h1>
+                 <p className="text-white">X</p>
+               </div>
                 <form className="m-5 p-4 flex flex-col gap-2"
                 onSubmit={handleSubmit(handleLectureSubmit)}>
                     <Upload

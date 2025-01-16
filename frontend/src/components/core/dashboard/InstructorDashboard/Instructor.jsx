@@ -11,7 +11,7 @@ const Instructor = () => {
     const [instructorData, setInstructorData] = useState(null);
     const [courses, setCourses] = useState([]);
     const { user } = useSelector((state) => state.profile);
-
+    console.log(user);
     useEffect(() => {
         const getCourseDataWithStats = async () => {
             setLoading(true);
@@ -19,7 +19,6 @@ const Instructor = () => {
                 const instructorApiData = await getInstructorData(enqueueSnackbar);
                 if (instructorApiData) {
                     setInstructorData(instructorApiData);
-                    setCourses(instructorApiData.courses || []); // Use courses from the API response
                 }
             } catch (error) {
                 enqueueSnackbar(error?.message || "Unable to fetch courses", { variant: "error" });
@@ -42,31 +41,28 @@ const Instructor = () => {
                 <p className="text-xl font-semibold">Hi {user?.firstName} 👋</p>
                 <p className="text-lg opacity-70 my-1">Let's start something new</p>
             </div>
-            {instructorData && instructorData.courses && instructorData.length > 0 ? (
-                <div>
-                    <div>
-                        <InstructorChart courses={instructorData.courses} />
-                        <div>
-                            <p>Statistics</p>
-                            <div>
+            {instructorData && instructorData.length > 0 ? (
+                <div className="mt-10">
+                    <div className="flex flex-col-reverse lg:flex-row justify-between gap-5">
+                        <InstructorChart courses={instructorData} />
+                        <div className="bg-[#161515] p-10 w-full lg:w-[30%]  my-4 rounded">
+                            <p className="text-2xl mb-6">Statistics</p>
+                            <div className="flex gap-5 my-2">
                                 <p>Total Courses</p>
-                                <p>{instructorData?.courses?.length || 0}</p>
-                            </div>
-                            <div>
+                                <p>{instructorData?.length || 0}</p>
+                            </div> 
+                            <div className="flex gap-5 my-2">
                                 <p>Total Students</p>
                                 <p>{instructorData?.totalStudentsEnrolled || 0}</p>
                             </div>
-                            <div>
+                            <div className="flex gap-5 my-2">
                                 <p>Total Income</p>
                                 <p>Rs {instructorData?.totalAmountGenerated || 0}</p>
                             </div>
-                        </div>
-                    </div>
-
-                    <div>
+                            <div>
                         <div>
-                            <h3>Your Courses</h3>
-                            <Link to="/dashboard/my-courses">View All</Link>
+                            <h3 className="my-5 text-lg">Your Courses</h3>
+                            <Link to="/dashboard/my-courses" className="px-7 py-2 bg-yellow-500 text-gray-700 rounded font-semibold hver:scale-95 transition-all duration-200">View All</Link>
                         </div>
                         {courses.slice(0, 3).map((course, index) => (
                             <div key={index}>
@@ -81,7 +77,11 @@ const Instructor = () => {
                                 </div>
                             </div>
                         ))}
+                             </div>
+                        </div>
                     </div>
+
+                 
                 </div>
             ) : (
                 <div>

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { updateProfile, updateProfilePicture } from "../../../services/operations/ProfileAPI";
+import Loader from "../../common/Loader";
 
 const Setting = () => {
 
@@ -97,6 +98,9 @@ const Setting = () => {
         enqueueSnackbar("Profile Picture is updated",{variant:"success"});
         setLoading(false)
     }
+}
+if(loading){
+  <Loader/>
 }
   return (
     <div >

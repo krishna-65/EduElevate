@@ -63,7 +63,7 @@ export default function Upload({
         {...getRootProps()}
         className={`${
           isDragActive ? "bg-richblack-600" : "bg-richblack-700"
-        } flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted  border-gray-800`}
+        } flex min-h-[250px] cursor-pointer items-center justify-center rounded-md border-2 border-dotted border-gray-800`}
       >
         <input {...getInputProps()} ref={inputRef} />
         {previewSource ? (
@@ -72,10 +72,17 @@ export default function Upload({
               <img
                 src={previewSource}
                 alt="Preview"
-                className="h-full w-full rounded-md object-cover"
+                className="w-full h-[300px] max-h-[300px] rounded-md object-contain overflow-hidden"
               />
             ) : (
-              <Player aspectRatio="16:9" playsInline src={previewSource} />
+             <div  className="max-w-full overflow-hidden h-[200px] max-h-[300px] ">
+               <Player
+                aspectRatio="16:9"
+                playsInline
+                src={previewSource}
+                className="max-w-full h-full w-full object-contain"
+              />
+             </div>
             )}
             {!viewData && (
               <button

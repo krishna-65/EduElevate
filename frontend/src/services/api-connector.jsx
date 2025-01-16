@@ -9,6 +9,7 @@ export const apiConnector = (method,url,body,params,headers) => {
         data:body ? body : null,
         params:params ? params : null,
         headers:headers ? headers : null,
+        credentials: 'include',
         withCredentials: true, // send cookies with requests
     })
 }

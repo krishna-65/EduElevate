@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { enqueueSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../../../common/Loader";
+import { makeCoursePublic } from "../../../../../services/operations/courseAPI";
 
 
 const PublishCourse = ()=>{
@@ -64,7 +65,7 @@ const PublishCourse = ()=>{
                         <div className="gap-3 flex">
                             <button className="border-2 border-blue-600 px-7 shadow hover:scale-95 hover:font-semibold transition-all duration-200 py-2 rounded"
                             onClick={handleSaveDraft}>Save as Draft</button>
-                            <button className="bg-yellow-400 text-gray-800 font-semibold px-7 shadow hover:scale-95 transition-all duration-200 py-2 rounded">Save and Publish</button>
+                            <button onClick={handlePublishCourse} className="bg-yellow-400 text-gray-800 font-semibold px-7 shadow hover:scale-95 transition-all duration-200 py-2 rounded">Save and Publish</button>
                         </div>
                     </div>
                     </>

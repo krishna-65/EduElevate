@@ -54,18 +54,4 @@ const MyCourses = () => {
 
 export default MyCourses;
 
-{/* <div key={course._id} className="p-2 m-3 rounded bg-[#161515] w-[300px] h-[300px]">
-<img src={course.thumbnail} alt="Course Thumbnail" className="h-[80%] w-full object-contain rounded"/>
-<h3 className="text-sm font-semibold my-1">{course.courseName}</h3>
-<p className="text-sm">{course.description}</p>
-<div className="flex gap-4">
-<button onClick={() => dispatch(setCourse(course))}
-    className="px-4 py-2 bg-[#4a2f6eb6] rounded text-gray-800 hover:scale-95 transition-all duration-200">View Course</button>
-    <button  className="px-4 py-2 bg-[#f7d540] rounded text-gray-800 hover:scale-95 transition-all duration-200"
-        onClick={() => handleEdit(course)}
-       
-    >
-        Edit
-    </button>
-</div>
-</div> */}
+

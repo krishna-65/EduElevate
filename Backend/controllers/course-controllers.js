@@ -48,7 +48,7 @@ exports.createCourse = async (req, res) => {
       
 
         //upload image
-        const thumbnailImage = await uploadImageToCloudinary(thumbnail.tempFilePath,process.env.FOLDER_NAME);
+        const thumbnailImage = await uploadImageToCloudinary(thumbnail,process.env.FOLDER_NAME);
 
         //create an entry for new course
         const newCourse = await Course.create({
@@ -114,8 +114,7 @@ exports.showAllCourse = async (req, res) =>{
 exports.getAlldetails = async(req,res) => {
 
     //first fetch the course id
-    const courseId = req.body;
-
+    const {courseId} = req.query;
     //find course with all details available
     try{
         const courseDetails = await Course.findById(courseId)
@@ -145,7 +144,7 @@ exports.getAlldetails = async(req,res) => {
                 }
             })
             .populate({
-                path:'studentsEnrolled',
+                path:'studentEnrolled',
                 populate:{
                         path:'additionalDetails',
                 }
@@ -178,66 +177,46 @@ exports.getAlldetails = async(req,res) => {
 
 //update Course Details
 
+
 exports.editCourse = async (req, res) => {
     try {
-        const {
-            courseName,
-            courseDescription,
-            whatYouWillLearn,
-            price,
-            category,
-            tag,
-            thumbnail,
-            instructions,
-        } = req.body;
+        const { courseId } = req.body;
 
-        // Check if all required fields are present
-        if (
-            !courseName ||
-            !courseDescription ||
-            !whatYouWillLearn ||
-            !price ||
-            !category ||
-            !tag ||
-            !thumbnail ||
-            !instructions
-        ) {
+        if (!courseId) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields are required',
+                message: 'Course ID is required',
             });
         }
 
-        // Check if a new thumbnail needs to be uploaded
-        let thumbnailURL = thumbnail;
-        if (req.files && req.files.thumbnail) {
-            const file = req.files.thumbnail;
+        // Build the update object dynamically
+        const updateData = {};
 
-            // Upload to Cloudinary
-            const uploadResponse = await cloudinary.uploader.upload(file.tempFilePath, {
-                folder: 'courses', // Optional: specify folder in Cloudinary
-                resource_type: 'image',
-            });
+        const allowedFields = [
+            'courseName',
+            'courseDescription',
+            'whatYouWillLearn',
+            'price',
+            'category',
+            'tag',
+            'instructions',
+        ];
+       
 
-            thumbnailURL = uploadResponse.secure_url;
-        }
+        // Loop through allowed fields and add them to updateData if present in req.body
+        allowedFields.forEach((field) => {
+            if (req.body[field]) {
+                updateData[field] = req.body[field];
+            }
+        });
 
-        // Find the course by ID and update it
-        const courseId = req.params.id; // Ensure the course ID is passed as a parameter
-        const updatedCourse = await Course.findByIdAndUpdate(
-            courseId,
-            {
-                courseName,
-                courseDescription,
-                whatYouWillLearn,
-                price,
-                category,
-                tag,
-                thumbnail: thumbnailURL,
-                instructions,
-            },
-            { new: true } // Return the updated document
-        );
+        // Find and update the course
+        const updatedCourse = await Course.findByIdAndUpdate(courseId, updateData, { new: true }).populate('category').populate({
+            path:'courseContent',
+            populate:{
+                path:'subSection',
+            }
+        });
 
         if (!updatedCourse) {
             return res.status(404).json({
@@ -259,6 +238,7 @@ exports.editCourse = async (req, res) => {
         });
     }
 };
+
 
 exports.getInstructorCourses = async(req,res) => {
     const userId = req.user.id;
@@ -296,7 +276,7 @@ exports.getInstructorCourses = async(req,res) => {
     const {courseId} = req.body;
     try{
         //find course and make it public
-        const updatedCourse = await Course.findByIdAndUpdate(courseId, {status:Published}, {new:true});
+        const updatedCourse = await Course.findByIdAndUpdate(courseId, {status:"Published"}, {new:true});
         if(!updatedCourse){
             return res.status(404).json({
                 success: false,
@@ -306,7 +286,7 @@ exports.getInstructorCourses = async(req,res) => {
         return res.status(200).json({
             success: true,
             message: 'Course made public successfully',
-            course: updatedCourse
+            data: updatedCourse
         })
     }catch(error){
         return res.status(500).json({

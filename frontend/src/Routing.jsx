@@ -27,6 +27,7 @@ import AddCourse from './components/core/dashboard/AddCourse/Index'
 import Dashboard from './pages/MoreDetails';
 import Instructor from './components/core/dashboard/InstructorDashboard/Instructor';
 import Catalog from './pages/Catalog';
+import CourseDetails from './pages/CourseDetails';
 
 
 const Routing = () => {
@@ -85,7 +86,7 @@ const Routing = () => {
             <Route path='/addCourse' element={<AddCoursePage/>}/>
             <Route path='/contact' element={<ContactUsPage/>}/> 
             <Route path='/catalog/:name' element={<Catalog/>}/>
-
+            <Route path='/catalog/:name/:id' element={<CourseDetails/>}/>
           </Routes>
     
     </div>

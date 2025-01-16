@@ -64,6 +64,7 @@ exports.showCategory = async (req, res) =>{
 exports.categoryPageDetails = async (req, res) => {
     try {
         // Get category ID
+       
         const { categoryId } = req.body;
 
         // Fetch courses for the selected category

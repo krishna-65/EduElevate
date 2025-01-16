@@ -6,14 +6,16 @@ import { setCourse } from "../../store/reducers/course-reducers";
 export const editCourseDetails = async(formData)=>{
     let result = null ;
     try{
+       
         const response = await apiConnector("PUT",courseEndpoints.EDIT_COURSE_API,formData)
-        console.log("Edit Course Details API Response: " + response);
+        console.log("Edit Course Details API Response: " , response);
         if(!response?.data?.success){
             throw new Error("Couldn't edit course details")
         }
-        result = response?.data?.data;
+        result = response?.data?.course;
+        return result;
         }catch(error){
-            console.log("Edit Course Details API error: " + error)
+            console.log("Edit Course Details API error: " , error)
         }
         return result;
 }
@@ -21,29 +23,34 @@ export const editCourseDetails = async(formData)=>{
 export const addCourseDetails = async(formData) => {
     let result = null ;
     try{
-        const response = await apiConnector("POST",courseEndpoints.CREATE_COURSE_API,formData)
-        console.log("Add Course Details API Response: " + response);
+         const response = await apiConnector("POST",courseEndpoints.CREATE_COURSE_API,formData)
+      
+        console.log("Add Course Details API Response: " , response);
         if(!response?.data?.success){
             throw new Error("Couldn't add course details")
         }
         result = response?.data?.data;
-        }catch(error){
-            console.log("Add Course Details API error: " + error)
-        }
         return result;
+        }catch(error){
+            console.log("Add Course Details API error: " , error)
+        }
+      
 }
 
-export const fetchCourseDetails = async(courseId) => {
+export const fetchCourseDetails = async(courseId,enqueueSnackbar) => {
+   let result = null;
     try{
-        const response = await apiConnector("GET", courseEndpoints.COURSE_DETAILS_API,{courseId});
+        const response = await apiConnector("GET",  `${courseEndpoints.COURSE_DETAILS_API}?courseId=${courseId}`);
           console.log("COURSE DETAILS API RESPONSE", response);
           if(!response?.data?.success){
             throw new Error(response?.data?.message)
           }
-          result = response.data;
+          enqueueSnackbar("Course Details Fetched Successfully", {variant:"success"})
+          result = response?.data?.courseDetails;
           return result;
     }catch(error){
         console.log("COURSE DETAILS API ERROR", error);
+        enqueueSnackbar("Failed to Fetch Course Details", {variant:"error"})
 
     }
 }
@@ -196,7 +203,22 @@ export const  makeCoursePublic = async(courseId, enqueueSnackbar)=>{
         }
         enqueueSnackbar("Course made public", {variant:"success"})
     }catch(e){
-        console.log("Error while making Course public", error.message);
+        console.log("Error while making Course public", e.message);
         enqueueSnackbar("Failed to make course public", {variant:"error"})
+    }
+}
+
+export const getCategoryPageDetails = async(categoryId)=>{
+    try{
+        console.log(categoryId);
+        const response = await apiConnector("GET",catalogData.CATALOGPAGEDATA_API,{categoryId});
+        console.log("GET_CATEGORY_PAGE_DETAILS API Response: ",response);
+        if(!response?.data?.success){
+            throw new Error(response?.data?.message);
+        }
+        console.log(response);
+        return response?.data;
+    }catch(error){
+        console.log("GET_CATEGORY_PAGE_DETAILS API Error: ",error);
     }
 }

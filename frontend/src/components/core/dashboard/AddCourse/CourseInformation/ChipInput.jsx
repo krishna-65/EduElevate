@@ -22,7 +22,7 @@ const ChipInput= ({
 
     useEffect(() => {
         if (editCourse) {
-          setChips(course?.tag || []);
+          setChips(JSON.parse(course?.tag));            
         }
         register(name, {
           required: true,
@@ -55,7 +55,7 @@ const ChipInput= ({
    <div className="flex flex-col gap-2">
         <label htmlFor={name}>{label} <sup className="text-red-400">*</sup></label>
        <div className="flex gap-3">
-        {chips.map((chip,index)=>(
+        {chips && chips.map((chip,index)=>(
                 <div>
                     <div className="flex items-center gap-1 text-sm text-gray-800 bg-yellow-400 rounded-full px-3 py-1" key={index}>
                         {chip} 

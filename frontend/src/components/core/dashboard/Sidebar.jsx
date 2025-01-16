@@ -53,9 +53,9 @@ export default function Sidebar() {
                 btn2Handler: () => setConfirmationModal(null),
               })
             }
-            className=" py-2 text-sm font-medium text-richblack-300"
+            className=" py-2 text-sm font-medium text-richblack-300 "
           >
-            <div className="flex  gap-x-2">
+            <div className="flex justify-center mr-7 gap-x-2">
               <VscSignOut className="text-lg" />
               <span>Logout</span>
             </div>

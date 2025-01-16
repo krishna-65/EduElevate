@@ -105,7 +105,7 @@ const Home = () => {
         <SuccessStories/>
 
         {/*Courses*/}
-              <Courses/>
+             <section id='courses'> <Courses/></section>
         {/*FAQ questions*/}
         <FAQSection/>
 

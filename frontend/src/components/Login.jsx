@@ -102,7 +102,7 @@ const LoginComponent = ({backgroundColor,textColor}) => {
 
                 {/* Right Section - Login Form */}
                 <form onSubmit={handleSubmit} className="w-[100%] md:w-1/2 flex justify-center items-center  text-white" data-aos="fade-down">
-                    <div className={`bg-[#2a2a2a] ${backgroundColor} p-3 py-8 sm:p-10 rounded-3xl shadow-lg w-[100%] sm:w-[80%] ${textColor} md:w-96`} data-aos="zoom-in">
+                    <div className={`bg-[#2a2a2a] ${backgroundColor} p-8 py-16 sm:p-10 rounded-3xl shadow-lg w-[100%] sm:w-[80%] ${textColor} md:w-96`} data-aos="zoom-in">
                     <h2 className="text-xl sm:text-3xl font-bold mb-6">Secure Access Made Simple</h2>
 
                     
@@ -153,9 +153,11 @@ const LoginComponent = ({backgroundColor,textColor}) => {
                     
                     <button type='submit' className="w-full bg-[#6d2a9c] py-3 mt-3 rounded-md">LogIn</button>
 
-                    <Link to='/signup'
+                  <div className='flex justify-center'>
+                  <Link to='/signup'
                    className='text-center cursor-pointer text-sm mt-4'>Don't Have an account?
                    </Link>
+                  </div>
                     </div>
                 </form>
     </div>

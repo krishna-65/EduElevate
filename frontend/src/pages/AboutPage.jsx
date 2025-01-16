@@ -3,7 +3,6 @@ import React from "react";
 import Navbar from "../components/common/Nav";
 import Footer from "../components/Footer";
 import ContactSectionForm from "../components/ContactFormSection";
-
 const AboutPage = () => {
   return (
   
@@ -50,9 +49,9 @@ const AboutPage = () => {
             className="relative md:w-1/2"
           >
             <img
-              src="https://via.placeholder.com/500"
+              src="./book.jpeg"
               alt="About EduElevate"
-              className="rounded-xl shadow-lg hover:shadow-purple-500/50 transition-shadow duration-300"
+              className="rounded-xl shadow-lg hover:shadow-purple-500/50 transition-shadow duration-300 w-[70vw]"
             />
             <motion.div
               className="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-purple-400 to-indigo-600 rounded-xl opacity-20"
@@ -119,9 +118,9 @@ const AboutPage = () => {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
-            { name: "Krishna", role: "Founder", img: "https://via.placeholder.com/150" },
-            { name: "Aarav", role: "Co-Founder", img: "https://via.placeholder.com/150" },
-            { name: "Priya", role: "Lead Developer", img: "https://via.placeholder.com/150" },
+            { name: "Krishna", role: "Founder", img: "./krishna.jpg" },
+            { name: "Kartik", role: "Co-Founder", img: "" },
+            { name: "Shubham", role: "Lead Developer", img: "" },
           ].map((member, index) => (
             <motion.div
               key={index}
@@ -134,7 +133,7 @@ const AboutPage = () => {
               <img
                 src={member.img}
                 alt={member.name}
-                className="w-24 h-24 mx-auto rounded-full mb-4"
+                className="w-24 h-24 mx-auto rounded-full mb-4 "
               />
               <h3 className="text-xl font-bold text-purple-400">{member.name}</h3>
               <p className="text-gray-400">{member.role}</p>
