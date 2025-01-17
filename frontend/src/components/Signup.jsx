@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { sendOtp } from '../services/operations/authAPI';
 import { useSnackbar } from 'notistack';
 import { setSignupData } from '../store/reducers/auth-reducer';
+import Loader from './common/Loader';
+import { TbEyeClosed } from 'react-icons/tb';
 
 const SignupComponent = ({backgroundColor,textColor}) => {
 
@@ -70,12 +72,19 @@ const SignupComponent = ({backgroundColor,textColor}) => {
             }));
         };
      
-        const handleSubmit = (event)=>{
+        const [loading,setLoading] = useState(false);
+
+        const handleSubmit = async(event)=>{
             // Send email to user
             event.preventDefault();
             dispatch(setSignupData(formData));
-             dispatch(sendOtp(formData.email,navigate,enqueueSnackbar ));
+            setLoading(true);
+            await dispatch(sendOtp(formData.email,navigate,enqueueSnackbar ));
+             setLoading(false);
         }
+       
+
+        if(loading) return <Loader/>
 
     
   return (
@@ -153,7 +162,7 @@ const SignupComponent = ({backgroundColor,textColor}) => {
                     </div>
           
                         
-                <div className='flex justify-between gap-3'>
+                <div className='flex md:flex-row flex-col justify-between gap-3'>
                         <input
                                 type="text"
                                 placeholder="Enter your name"
@@ -187,8 +196,8 @@ const SignupComponent = ({backgroundColor,textColor}) => {
                                 onChange={handleChange}
                             />
                 </div>
-                  <div className='flex justify-between gap-3'>
-                        <div className='relative w-[50%]'>
+                  <div className='flex md:flex-row flex-col justify-between gap-3'>
+                        <div className='relative w-full md:w-[50%]'>
                             <input
                                     // type={passwordHidden?'text':'password'}
                                     type='password'
@@ -199,9 +208,10 @@ const SignupComponent = ({backgroundColor,textColor}) => {
                                     value={formData.password}
                                     onChange={handleChange}
                                 />
-                                <FaEye onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>
+                                {passwordHidden && <FaEye onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>}
+                                {!passwordHidden && <TbEyeClosed onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>}
                         </div>
-                        <div className='relative w-[50%]'>
+                        <div className='relative w-full md:w-[50%]'>
                             <input
                                     type={passwordHidden?'text':'password'}
                                     placeholder="Enter your confirm password"
@@ -211,14 +221,15 @@ const SignupComponent = ({backgroundColor,textColor}) => {
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
                                 />
-                                <FaEye onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>
+                               {passwordHidden && <FaEye onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>}
+                               {!passwordHidden && <TbEyeClosed onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>}
                         </div>
                   </div>
                     
-                    <button type='submit' className="w-full bg-red-400 py-3 rounded-md">Send OTP</button>
+                    <button type='submit' className="w-full bg-red-400 py-3 rounded-md hover:scale-95 transition-all duration-200">Send OTP</button>
 
                     <Link to='/login'>
-                   <p className='text-center text-sm mt-4'>Already Have an account?</p>
+                   <p className='text-center text-sm mt-4 hover:text-blue-400'>Already Have an account?</p>
                    </Link>
                     </div>
                 </form>

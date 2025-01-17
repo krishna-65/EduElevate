@@ -29,7 +29,7 @@ exports.sendOTP = async ( req, res ) => {
                     lowerCaseAlphabets:false,
                     specialChars:false,
                 })
-                console.log("otp generated", otp);
+               
 
                 //check otp is unique or not
                 let result = await OTP.findOne({otp:otp});
@@ -260,14 +260,29 @@ exports.logout = async( req,res) => {
 }
 //changed Password
 exports.changedPassword = async (req, res)=>{
-    try{
         //fetch data from request
-        
-   
-    }catch(error){
+        const {email,password}  = req.body;
+        try{
+            const hashedPassword = await bcrypt.hash(password,10);
+
+            const user = await User.findAndUpdate({email}, {password:hashedPassword}, {new:true});
+            if(!user){
+                return res.status(400).json({
+                    success: false,
+                    message: 'User not found',
+                   
+                });
+            }
+            return res.status(200).json({
+                success: true,
+                user: user,
+                message: 'Password changed successfully',
+            });
+        }catch(error){
         return res.status(500).json({
             success:true,
             message:'Server Error'
         })
     }
 }
+

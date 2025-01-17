@@ -5,7 +5,7 @@ import Loader from "../components/common/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { sigUp } from "../services/operations/authAPI";
 import { enqueueSnackbar } from "notistack";
-import { clearSignupData } from "../store/reducers/auth-reducer";
+import { clearSignupData, setLoading } from "../store/reducers/auth-reducer";
 import { useNavigate } from "react-router-dom";
 
 const OtpVerification = () => {
@@ -53,13 +53,17 @@ const OtpVerification = () => {
     }
 
     const otpCode = otp.join("");
-    console.log(otpCode);
+  
     const formData = { ...data, otp: otpCode };
-    console.log(formData);
-  dispatch(sigUp(formData,navigate,enqueueSnackbar))
-dispatch(clearSignupData()); // Clear signup data after success
+  
+    dispatch(sigUp(formData,navigate,enqueueSnackbar))
+      dispatch(clearSignupData()); 
+      // Clear signup data after success
 };
 
+if(loading){
+  return <Loader/>; // Return loading spinner when loading state is true
+}
   return (
     <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center text-white">
         {

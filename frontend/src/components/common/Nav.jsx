@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Logo from './Logo';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavbarLinks } from '../../data/navbar-links';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaShoppingCart } from 'react-icons/fa';
@@ -13,6 +13,7 @@ import { IoIosArrowDropdown } from "react-icons/io";
 import { setCategory } from '../../store/reducers/category-reducer';
 import { logout } from '../../services/operations/authAPI';
 import ConfirmationModal from './ConfirmationModal';
+import { enqueueSnackbar } from 'notistack';
 
 const Navbar = () => {
   const [hasShadow, setHasShadow] = useState(false);
@@ -22,6 +23,7 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.profile);
   const { totalItems } = useSelector((state) => state.cart);
   const [confirmationModal, setConfirmationModal] = useState(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,7 +61,7 @@ const Navbar = () => {
   };
 
   const location = useLocation();
- console.log(location.pathname.split('/')[1]);
+
   const matchRoute = (route) => route===`/${location.pathname.split('/')[1]}`;
 
   return (
@@ -117,7 +119,7 @@ const Navbar = () => {
           <div className="md:flex hidden space-x-4 items-center">
             {isauthenticate && user.accountType !== "Instructor" && (
               <Link to="/dashboard/cart" className="relative">
-                <FaShoppingCart  className='bg-red-600'/>
+                <FaShoppingCart  className='text-2xl hover:text-[#6674CC]'/>
                 {totalItems > 0 && (
                   <div className="absolute top-0 right-0 px-2 py-1 text-xs text-white bg-[#6674CC] rounded-full">
                     {totalItems}
@@ -150,27 +152,28 @@ const Navbar = () => {
             <Link to="/about" className="text-center font-semibold text-gray-50 hover:text-[#6674CC] transition-all duration-200">About</Link>
             <Link to="/contact" className=" text-center font-semibold text-gray-50 hover:text-blue-600 transition-all duration-200">Contact</Link>
             <Link to="/signup" className={`${isauthenticate?"hidden":""} my-10 px-4 py-2 border-2 border-[#6674CC] text-white rounded hover:bg-blue-700 text-center hover:scale-95 transition-all duration-200 `}>Sign Up</Link>
-            {isauthenticate&&
+            <Link to="/login" className={`${isauthenticate?"hidden":""} my-10 px-4 py-2 border-2 border-[#6674CC] text-white rounded hover:bg-blue-700 text-center hover:scale-95 transition-all duration-200 `}>Login</Link>
+            {isauthenticate &&
             <div className='flex justify-center gap-3 items-center mr-10'>
               <div className='pointer-events-none'><ProfileDropDown/></div>
               <Link to='/dashboard/my-profile'>Profile</Link>
               </div>
               }
 
-        <button
+        {isauthenticate && <button
             onClick={() =>
               setConfirmationModal({
                 text1: "Are you sure?",
                 text2: "You will be logged out of your account.",
                 btn1Text: "Logout",
                 btn2Text: "Cancel",
-                btn1Handler: () => dispatch(logout(navigate)),
+                btn1Handler: () => dispatch(logout(navigate,enqueueSnackbar)),
                 btn2Handler: () => setConfirmationModal(null),
               })
             
               } className=" text-sm px-5 hover:scale-95 transition-all duration-200 py-2 bg-red-300 text-center  rounded-md  text-red-600 hover:text-red-800">
             Logout
-                  </button>
+                  </button>}
           </div>
         )}
          {confirmationModal && <ConfirmationModal modalData={confirmationModal}/>}

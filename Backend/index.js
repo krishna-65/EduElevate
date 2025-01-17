@@ -14,6 +14,7 @@ const {cloudinaryConnect} = require('./config/cloudinary');
 const fileUpload = require('express-fileupload');
 const dotenv = require('dotenv');
 const { uploadImageToCloudinary } = require('./utils/imageUploader');
+const { send } = require('./controllers/contact-controller');
 
 dotenv.config();
 

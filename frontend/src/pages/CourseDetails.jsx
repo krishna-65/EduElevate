@@ -14,6 +14,9 @@ const CourseDetails = () =>{
     const {id} = useParams();
     const [course,setCourse] = useState();
     const [loading, setLoading] = useState(false);
+    const [totalSubSection,setTotalSubSection] = useState(0);
+    const [timeDuration,setTimeDuration] = useState(0);
+    const [instructions,setInstructions] = useState([])
     useEffect(()=>{
         const fetchCourse = async() => {
             setLoading(true);
@@ -24,8 +27,7 @@ const CourseDetails = () =>{
         fetchCourse();
     },[]);
 
-    const [totalSubSection,setTotalSubSection] = useState(0);
-    const [timeDuration,setTimeDuration] = useState(0);
+  
     useEffect(() => {
         if (course?.courseContent) {
             // Calculate total sub-sections
@@ -47,13 +49,15 @@ const CourseDetails = () =>{
             );
             setTimeDuration(totalDuration.toFixed(2)); // Optionally round to 2 decimal places
         }
+        if(course?.instructions)
+       setInstructions(JSON.parse(course?.instructions))
     }, [course]);
     
-   
+   console.log(instructions)
     if(loading) return <Loader/>;
 
    console.log(course);
- console.log(course?.whatYouWillLearn?.split('.')); 
+ 
     return (
         <>
         <Navbar/>
@@ -69,10 +73,10 @@ const CourseDetails = () =>{
       </div>
 
       {/* Cart section */}
-      <div className="top-[400px] sm:top-[250px] md:[100px] right-8  sm:right-20 p-10 w-[80%] sm:max-w-md mx-auto border-2 border-blue-700  absolute flex flex-col gap-5 rounded-lg shadow-lg sm:w-[80vw] lg:w-[40vw] xl:[25vw]">
+      <div className="top-[600px]  md:top-[250px] right-8  sm:right-20 p-10 w-[80%] sm:max-w-md mx-auto border-2 border-blue-700  absolute flex flex-col gap-5 rounded-lg shadow-lg sm:w-[80vw] lg:w-[40vw] xl:[25vw]">
         <img
           src={course?.thumbnail}
-          className="rounded mb-4 w-full object-cover h-56 sm:h-72"
+          className="rounded mb-4 w-full object-contain h-56 sm:h-72"
           alt={course?.courseName}
         />
         <h3 className="text-2xl text-white">RS. {course?.price}</h3>
@@ -149,6 +153,16 @@ const CourseDetails = () =>{
                         <span className="text-[#6674CC] text-lg "> {course?.instructor?.firstName + " " + course?.instructor?.lastName}</span>
                     </div>
                     <p className="p-5 text-stone-400">I will be your lead trainer in this course. With no time, I will help you to understand the subject in an easy manner. I have a huge experience in online training and recorsing videos. Let's get started!</p>
+                </div>
+
+                <div className="border-2 border-blue-700  md:w-[700px] p-10 mb-10 rounded">
+                <div className="flex flex-col gap-4">
+                      {instructions?.map((instruction,index)=>(
+                       
+                          <p key={index}>{index+1}. {instruction}</p>
+                     
+                      ))}
+                      </div>
                 </div>
         </div>
 

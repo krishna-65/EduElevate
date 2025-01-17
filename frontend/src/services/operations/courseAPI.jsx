@@ -70,7 +70,7 @@ export const fetchInstructorCourses= async() => {
     }
 }
 
-export const getALLCourses = async ( )=>{
+export const getALLCourses = async ()=>{
     let result = null;
      try{
         const response = await apiConnector("GET",courseEndpoints.GET_ALL_COURSE_API);
@@ -78,7 +78,8 @@ export const getALLCourses = async ( )=>{
         if(!response?.data?.success){
             throw new Error(response?.data?.message);
         }
-        result = response?.data
+        result = response?.data?.courses;
+      
         return result;
      }catch(error){
         console.log("Get all courses failed",error);

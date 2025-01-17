@@ -87,6 +87,7 @@ const Routing = () => {
             <Route path='/contact' element={<ContactUsPage/>}/> 
             <Route path='/catalog/:name' element={<Catalog/>}/>
             <Route path='/catalog/:name/:id' element={<CourseDetails/>}/>
+            {/* <Route path='/dashboard/cart' element={<Cart/>}> */}
           </Routes>
     
     </div>

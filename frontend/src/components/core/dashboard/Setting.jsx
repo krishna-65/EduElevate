@@ -42,6 +42,7 @@ const Setting = () => {
   }
   // Handle form submission
   const onSubmit = async(data) => {
+    console.log(data);
     if(!checkDataIsUpdated(data)){
         enqueueSnackbar("Informations is not updated", {variant:'info'
         })
@@ -99,9 +100,8 @@ const Setting = () => {
         setLoading(false)
     }
 }
-if(loading){
-  <Loader/>
-}
+if(loading) return <Loader/>
+
   return (
     <div >
       <h2>Edit Profile</h2>
@@ -217,6 +217,7 @@ if(loading){
                 id="gender"
                 name="gender"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-transparent text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+                {...register("gender")}
                 >
                 <option value="" disabled selected className="text-gray-500">
                     Select your gender
@@ -252,8 +253,6 @@ if(loading){
           </button>
         </div>
         </div>
-
-        {/* Buttons */}
     
       </form>
     </div>

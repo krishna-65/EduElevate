@@ -107,7 +107,7 @@ const CourseBuilder = () => {
                     type="Submit"
                     text={editSection ? "Edit Section Name" : "Create Section"}
                     outline={true}
-                    className={`bg-transparent  gap-2 border-blue-700 text-blue-500 hover:scale-95 transition-all duration-200 ${loading ? "pointer-events-none opacity-50" : "flex items-center"}`}
+                    className={`bg-transparent  gap-1 border-blue-700 text-blue-500 hover:scale-95 transition-all duration-200 ${loading ? "pointer-events-none opacity-50" : "flex items-center"}`}
                     >
                            <VscAdd/>
                  </IconBtn>

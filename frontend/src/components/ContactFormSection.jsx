@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { enqueueSnackbar } from "notistack";
 import Loader from "./common/Loader";
 import CountryCode from "../data/countrycode.json";
+import { contactusEndpoint } from "../services/api";
+import { apiConnector } from "../services/api-connector";
 
 const ContactFormSection = () => {
     const [loading, setLoading] = useState(false);
@@ -17,8 +19,7 @@ const ContactFormSection = () => {
         console.log("Loading data:", data);
         try {
             setLoading(true);
-            // const response = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
-            const response = { success: "OK" };
+            const response = await apiConnector("POST", contactusEndpoint.CONTACT_US_API, data);
             console.log("Logging response:", response);
             enqueueSnackbar("Message sent successfully", { variant: "success" });
             setLoading(false);
@@ -40,6 +41,8 @@ const ContactFormSection = () => {
             });
         }
     }, [reset, isSubmitSuccessful]);
+
+    if(loading) return <Loader/>
 
     return (
         <div className="px-4 md:px-8 lg:px-16 mx-auto flex justify-center items-center py-20 w-full ">

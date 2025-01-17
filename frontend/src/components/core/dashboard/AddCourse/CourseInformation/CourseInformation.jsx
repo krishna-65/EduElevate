@@ -240,6 +240,7 @@ const CourseInformation = () => {
 
         {/* Instructions */}
         <RequirementFields
+        label={"Requirement/Instructions"}
           name="instructions"
           setValue={setValue}
           errors={errors}

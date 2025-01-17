@@ -37,7 +37,7 @@ const RequirementFields = (
 
     return (
         <div className="flex flex-col gap-2">
-            <label htmlFor="name">{label}</label>
+            <label htmlFor="name">{label}<sup className="text-red-400">*</sup></label>
             <input type="text"
             name="requirement"
             id="requirement"

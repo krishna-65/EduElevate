@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './common/Nav';
 import { HiRocketLaunch } from "react-icons/hi2";
-import { FaCalendarAlt, FaEye } from "react-icons/fa";
+import { FaCalendarAlt, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaBookReader } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import Aos from 'aos';
@@ -146,7 +146,8 @@ const LoginComponent = ({backgroundColor,textColor}) => {
                                 value={formData.password}
                                 onChange={handleChange}
                             />
-                            <FaEye onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>
+                            {!passwordHidden && <FaEyeSlash onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>}
+                            {passwordHidden && <FaEye onClick={handlePasswordVisibility} className='absolute right-3 top-4 text-white'/>}
                   </div>
 
                   <Link to='/forgotPassword' className='flex justify-end text-sm hover:cursor-pointer'>Forgot Password</Link>
