@@ -121,7 +121,7 @@ const Navbar = () => {
               <Link to="/dashboard/cart" className="relative">
                 <FaShoppingCart  className='text-2xl hover:text-[#6674CC]'/>
                 {totalItems > 0 && (
-                  <div className="absolute top-0 right-0 px-2 py-1 text-xs text-white bg-[#6674CC] rounded-full">
+                  <div className="absolute top-0 left-7 px-2 py-1 text-xs text-white bg-[#6674CC] rounded-full">
                     {totalItems}
                   </div>
                 )}

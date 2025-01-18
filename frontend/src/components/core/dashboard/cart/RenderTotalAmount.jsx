@@ -12,14 +12,14 @@ const RenderTotalAmount =() => {
     
     }
     return(
-        <div>
+        <div className="text-2xl bg-[#161515] w-[200px] flex justify-center px-5 py-10 gap-3 items-center rounded ml-auto">
            <p>Total:</p>
-           <p>Rs {total}</p>
+           <p className="text-blue-500">Rs {total}</p>
 
-           <IconBtn
+           {/* <IconBtn
            text={"Buy Now"}
            onClick={handleBuyCourse}
-           className={"w-full justify-center"}/>
+           className={"w-full justify-center"}/> */}
         </div>
     )
 }

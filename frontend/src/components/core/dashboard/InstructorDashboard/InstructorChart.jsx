@@ -46,17 +46,17 @@ const InstructorChart = ({ courses = [] }) => {
     };
 
     return (
-        <div className="bg-[#161515] w-full lg:w-[70%] my-4 p-10">
+        <div className="bg-[#161515]  lg:w-[70%] m-4 p-10">
             <h3 className="text-white text-xl mb-4">Visualize</h3>
-            <div className="flex gap-10 my-4">
+            <div className="flex gap-6 md:gap-10 my-4 mx-auto">
                 <button
-                    className={`px-7 py-2 ${currentChart === "students" ? "bg-gray-800" : "bg-transparent"} border-2 border-gray-800 rounded hover:scale-95 transition-all duration-200`}
+                    className={`px-6 py-2 ${currentChart === "students" ? "bg-gray-800" : "bg-transparent"} border-2 border-gray-800 rounded hover:scale-95 transition-all duration-200`}
                     onClick={() => setCurrentChart("students")}
                 >
                     Students
                 </button>
                 <button
-                    className={`px-7 py-2 ${currentChart === "income" ? "bg-gray-800" : "bg-transparent"} border-2 border-gray-800 rounded hover:scale-95 transition-all duration-200`}
+                    className={`px-6 py-2 ${currentChart === "income" ? "bg-gray-800" : "bg-transparent"} border-2 border-gray-800 rounded hover:scale-95 transition-all duration-200`}
                     onClick={() => setCurrentChart("income")}
                 >
                     Income

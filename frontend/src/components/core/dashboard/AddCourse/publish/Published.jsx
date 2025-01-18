@@ -57,7 +57,7 @@ const PublishCourse = ()=>{
                         </p>
                         </div>
                 </div>
-                        <div className="flex p-5 justify-between mt-10 ">
+                        <div className="flex p-5 justify-between mt-10 flex-col md:flex-row gap-5">
                         <div>
                             <button className="border-2 border-blue-600 px-7 shadow hover:scale-95 hover:font-semibold transition-all duration-200 py-2 rounded"
                             onClick={goBack}>Back</button>

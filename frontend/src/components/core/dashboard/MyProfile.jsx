@@ -22,7 +22,7 @@ const MyProfile = () => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            className="py-5  md:px-5 "
+            className="py-5  md:px-5 m-3"
         >
             <motion.h1
                 variants={containerVariants}

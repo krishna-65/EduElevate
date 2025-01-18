@@ -101,10 +101,10 @@ const Footer = () =>{
                                 <h2 className="text-center text-[#d7dae4] text-md my-2">Made with ❤️ Krishnakant Sharma © 2024 <Logo className={`inline-block text-md`}/></h2>
 
                                 <div className="flex text-[#d7dae4]  gap-5 text-xl">
-                                    <a href="/facebook"><FaFacebook/></a>
-                                    <a href="/instagram"><FaInstagram/></a>
-                                    <a href="/linkedin"><FaLinkedin/></a>
-                                    <a href="/github"><FaGithub/></a>
+                                    <a href="https://www.facebook.com"><FaFacebook/></a>
+                                    <a href="https://instagram.com/"><FaInstagram/></a>
+                                    <a href="https://www.linkedin.com/feed/"><FaLinkedin/></a>
+                                    <a href="https://github.com/krishna-65/"><FaGithub/></a>
                                 </div>
                             </div>                
                     </div>

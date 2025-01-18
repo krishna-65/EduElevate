@@ -212,13 +212,13 @@ export const  makeCoursePublic = async(courseId, enqueueSnackbar)=>{
 export const getCategoryPageDetails = async(categoryId)=>{
     try{
         console.log(categoryId);
-        const response = await apiConnector("GET",catalogData.CATALOGPAGEDATA_API,{categoryId});
+        const response = await apiConnector("GET","http://localhost:8000/api/v1/course/getCategoryPageDetails",{},{categoryId});
         console.log("GET_CATEGORY_PAGE_DETAILS API Response: ",response);
         if(!response?.data?.success){
             throw new Error(response?.data?.message);
         }
         console.log(response);
-        return response?.data;
+        return response?.data?.data;
     }catch(error){
         console.log("GET_CATEGORY_PAGE_DETAILS API Error: ",error);
     }

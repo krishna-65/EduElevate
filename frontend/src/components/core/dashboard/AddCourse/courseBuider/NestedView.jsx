@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RxDropdownMenu } from "react-icons/rx";
 import { MdEdit } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { BiSolidDownArrow } from "react-icons/bi";
+import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import SubSectionModal from "./SubSectonModal";
 import ConfirmationModal from "../../../../common/ConfirmationModal";
 import { deleteSection, deleteSubSection } from "../../../../../services/operations/courseAPI";
@@ -57,16 +57,24 @@ const NestedView = ({ handleChangedEditSection }) => {
         }
     };
 
-        console.log(course);
+    const [openSections, setOpenSections] = useState({});
+
+    const toggleSection = (id) => {
+      setOpenSections((prev) => ({
+        ...prev,
+        [id]: !prev[id], 
+      }));
+    };
 
     return (
         <div>
             <div className="mt-10 rounded px-8 py-4">
                 {course?.courseContent?.map((section) => (
-                    <details  key={section._id} open className="flex flex-col  mt-10">
+                    <details  key={section._id} open className="flex flex-col  mt-10"
+                    onToggle={() => toggleSection(section._id)} >
                         <summary className="flex items-center justify-between gap-x-4 border-b-2">
-                            <div className="flex items-center gap-x-3">
-                                <RxDropdownMenu />
+                            <div className="flex items-center gap-x-3 text-[12px] sm:text-md mb-2">
+                                <RxDropdownMenu className="text-xl"/>
                                 <p>{section.sectionName}</p>
                             </div>
                             <div className="flex items-center gap-3">
@@ -90,7 +98,11 @@ const NestedView = ({ handleChangedEditSection }) => {
                                     <RiDeleteBin6Line />
                                 </button>
                                 <span>|</span>
-                                <BiSolidDownArrow className="text-xl" />
+                                {openSections[section._id] ? (
+                                    <BiSolidUpArrow className="text-xl" />
+                                ) : (
+                                    <BiSolidDownArrow className="text-xl" />
+                                )}
                             </div>
                         </summary>
                         {/* Section Subsection Rendering */}
@@ -99,11 +111,11 @@ const NestedView = ({ handleChangedEditSection }) => {
                                     <div
                                     key={index}
                                     onClick={() => setViewSubSection(data)}
-                                    className="flex items-center justify-between gap-x-3 border-b-2"
+                                    className="flex items-center justify-between gap-x-3 border-b-2 mb-3"
                                     >
                                     <div className="flex items-center gap-x-3">
-                                        <RxDropdownMenu />
-                                        <p>{data.title}</p>
+                                        <RxDropdownMenu  className="text-md"/>
+                                        <p className="text-[12px] sm:text-md">{data.title}</p>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         {/* Edit Button */}

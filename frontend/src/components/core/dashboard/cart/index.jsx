@@ -9,14 +9,14 @@ const Cart = () => {
     return(
             <div> 
                 <h3 className="text-2xl font-semibold text-[#c9b1b1]">Your Cart</h3>
-                <p className="ml-3 opacity-70">{totalItems} Courses in Cart</p>
+                <p className="m-3 opacity-70">{totalItems} Courses in Cart</p>
                { !total > 0  ? (<div className=" h-[80vh]  flex justify-center items-center">
                         <p className="text-lg">You cart is empty !</p>
                     </div>)
                     :(
                       <div>
-                         <RenderCartCourses/>
                          <RenderTotalAmount/>
+                         <RenderCartCourses/>    
                      </div>
                     )}
             </div>

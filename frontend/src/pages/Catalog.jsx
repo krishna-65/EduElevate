@@ -2,13 +2,15 @@ import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/common/Nav";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getALLCourses, getCategoryPageDetails } from "../services/operations/courseAPI";
-import { setCourse } from "../store/reducers/course-reducers";
+import {  getCategoryPageDetails } from "../services/operations/courseAPI";
+import CourseCart from "../components/common/CourseCart";
+import Footer from "../components/Footer";
 
 const Catalog = ()=>{
    
     const { name } = useParams();
-    const [selectedCategory, setSelectedCategory] = useState(); // Renamed for clarity
+    const [selectedCategory, setSelectedCategory] = useState(); 
+    const [courses,setCourses] = useState(null);
     const dispatch = useDispatch();
     
     const formattedName = name
@@ -27,19 +29,14 @@ const Catalog = ()=>{
     },[name])
     
    useEffect(()=>{
-       const getCourses = async()=>{
-        console.log(selectedCategory);
-            const response = await getCategoryPageDetails(selectedCategory._id);
-            dispatch(setCourse(response?.courses));
-            console.log(response);
+       const getCourses = async()=>{  
+        const  response = await getCategoryPageDetails(selectedCategory._id);
+        console.log(response);
+        setCourses(response);
        }
        getCourses();
-   },[]);
-
-   const {course} =  useSelector((state)=>state.course);
- 
-   console.log(selectedCategory);
-
+   },[selectedCategory]);
+   console.log(courses)
  
     return(
         <>
@@ -50,6 +47,37 @@ const Catalog = ()=>{
                     <span className="text-[#6674CC] text-lg leading-10 font-semibold">{selectedCategory?.name}</span>
                     <p className="text-gray-400 text-lg">{selectedCategory?.description}</p>
             </div>
+            {
+                courses &&
+              <>  <div className="p-10">
+                    <p className="text-2xl font-semibold">{selectedCategory?.name}</p>
+                    {courses?.selectCategoryCourses?.course.length>0? (
+                    <div className=" mx-auto grid lg:grid-cols-2 grid-cols-1 xl:grid-cols-3 gap-8 py-10 text-white rounded-3xl bg-red-400">
+                  {  courses.selectCategoryCourses.course.map((c, index) => (
+                        <CourseCart key={index} data={c} />
+                    ))}
+                         </div>) : (
+                    <div className="my-10 text-center">
+                       <p className="text-stone-400 "> No courses found in this category.</p></div>
+                    )}
+
+                     
+                  </div>
+                  
+           
+
+                <div className="p-10">
+                <p className="text-2xl font-semibold">{selectedCategory?.name}</p>
+                <div className=" mx-auto grid lg:grid-cols-2 grid-cols-1 xl:grid-cols-3 gap-8 py-10 text-white rounded-3xl">
+                {courses?.topSellingCourses?.map((c, index) => (
+                        <CourseCart key={index} data={c}/>
+                    ))}
+                
+                </div>
+                </div>
+           </>
+            }
+        <Footer/>
         </>
     )
 }

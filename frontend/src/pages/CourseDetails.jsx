@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/common/Nav";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,13 +10,16 @@ import { FaVideo } from "react-icons/fa";
 import { GiArrowCursor } from "react-icons/gi";
 import { CiMobile4 } from "react-icons/ci";
 import { GrCertificate } from "react-icons/gr";
+import { addToCart } from "../store/reducers/cart-reducers";
 const CourseDetails = () =>{
+    const {user} = useSelector((state)=>state.profile);
     const {id} = useParams();
     const [course,setCourse] = useState();
     const [loading, setLoading] = useState(false);
     const [totalSubSection,setTotalSubSection] = useState(0);
     const [timeDuration,setTimeDuration] = useState(0);
     const [instructions,setInstructions] = useState([])
+    const dispatch = useDispatch();
     useEffect(()=>{
         const fetchCourse = async() => {
             setLoading(true);
@@ -52,11 +55,13 @@ const CourseDetails = () =>{
         if(course?.instructions)
        setInstructions(JSON.parse(course?.instructions))
     }, [course]);
-    
-   console.log(instructions)
+ 
+    const handleAddToCart = () =>{
+      console.log("hi");
+            dispatch(addToCart({course,enqueueSnackbar}));
+    }
     if(loading) return <Loader/>;
 
-   console.log(course);
  
     return (
         <>
@@ -80,10 +85,10 @@ const CourseDetails = () =>{
           alt={course?.courseName}
         />
         <h3 className="text-2xl text-white">RS. {course?.price}</h3>
-        <button className="px-7 py-2 bg-yellow-500 text-gray-900 font-semibold rounded hover:scale-95 transition-all duration-200 mt-4">
+        <button onClick={handleAddToCart} className={`${user.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-yellow-500 text-gray-900 font-semibold rounded hover:scale-95 transition-all duration-200 mt-4`}>
           Add to cart
         </button>
-        <button className="px-7 py-2 bg-transparent border-blue-700 border-2 font-semibold rounded hover:scale-95 transition-all duration-200 mt-2">
+        <button className={`${user.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-transparent border-blue-700 border-2 font-semibold rounded hover:scale-95 transition-all duration-200 mt-2`}>
           Buy now
         </button>
 
@@ -103,7 +108,7 @@ const CourseDetails = () =>{
     </div>
         
 
-        <div className="xl:mt-[400px] mt-[900px]  w-[90%] md:w-11/12 mx-auto flex flex-col gap-10">
+        <div className="xl:mt-[400px] mt-[1000px]  w-[90%] md:w-11/12 mx-auto flex flex-col gap-10">
            <div className="border-2 border-blue-700  md:w-[700px] p-10 mb-10 rounded">
                 <h3 className="my-4 text-2xl">What You Will Learn</h3>
                 {
@@ -157,6 +162,7 @@ const CourseDetails = () =>{
 
                 <div className="border-2 border-blue-700  md:w-[700px] p-10 mb-10 rounded">
                 <div className="flex flex-col gap-4">
+                  <h3 className="text-2xl">Prerequisites</h3>
                       {instructions?.map((instruction,index)=>(
                        
                           <p key={index}>{index+1}. {instruction}</p>

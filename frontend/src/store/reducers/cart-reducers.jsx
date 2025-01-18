@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { enqueueSnackbar } from "notistack";
 
 const initialState = {
-     cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : null,
+     cart: localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [],
      total: localStorage.getItem('total') ? JSON.parse(localStorage.getItem('total')):0,
      totalItems: localStorage.getItem('totalItem') ? JSON.parse(localStorage.getItem('totalItem')) : 0, 
 }
@@ -12,14 +12,15 @@ const cartSlice = createSlice({
     initialState,
     reducers:{
         addToCart: (state,value)=>{
-            const { course, enqueueSnackbar } = action.payload;
-            const index = state.cart.findIndex((item)=>item._id === course._id);
+            const { course, enqueueSnackbar } = value.payload;
+          
+            const index = state?.cart?.findIndex((item)=>item._id === course._id);
             if(index>=0){
                 enqueueSnackbar("Course already in cart", {variant: 'error'});
                 return ;
             }
             state.cart.push(course);
-            state.totalItem++;
+            state.totalItems++;
             state.total += course.price;
 
             //update loaclstorage

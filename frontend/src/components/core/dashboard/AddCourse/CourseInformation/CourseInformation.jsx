@@ -133,7 +133,7 @@ const CourseInformation = () => {
   return (
     <div>
       <form
-        className="rounded-md shadow bg-[#161515] p-5 flex flex-col gap-4"
+        className="rounded-md  shadow bg-[#161515] p-5 flex flex-col gap-4  w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* Course Name */}

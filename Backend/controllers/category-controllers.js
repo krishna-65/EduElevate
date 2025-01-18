@@ -65,12 +65,12 @@ exports.categoryPageDetails = async (req, res) => {
     try {
         // Get category ID
        
-        const { categoryId } = req.body;
-
+        const { categoryId } = req.query;
+    
         // Fetch courses for the selected category
         const selectCategoryCourses = await Category.findById(categoryId).populate({
             path: 'course',
-            match: { status: "Published" }, // Ensure "published" matches your schema's field value
+            // match: { status: "Published" }, // Ensure "published" matches your schema's field value
         });
 
         // Validate if category exists
@@ -84,13 +84,15 @@ exports.categoryPageDetails = async (req, res) => {
         // Fetch courses for different categories
         const differentCategory = await Category.find({
             _id: { $ne: categoryId },
-        }).populate('courses'); // Ensure "courses" matches your schema
+        }).populate('course'); // Ensure "courses" matches your schema
 
         // Fetch top-selling courses
         const topSellingCourses = await Course.aggregate([
             {
                 $addFields: {
-                    enrollmentCount: { $size: "$enrolledStudents" }, // Count enrolled students
+                    enrollmentCount: {
+                        $size: { $ifNull: ["$enrolledStudents", []] }, // Use an empty array if `enrolledStudents` is missing
+                    },
                 },
             },
             {
@@ -100,6 +102,8 @@ exports.categoryPageDetails = async (req, res) => {
                 $limit: 10, // Limit to top 10 courses
             },
         ]);
+        
+
 
         // Send response
         return res.status(200).json({

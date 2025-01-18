@@ -37,7 +37,7 @@ const Instructor = () => {
 
     return (
         <div>
-            <div>
+            <div className="mx-3">
                 <p className="text-xl font-semibold">Hi {user?.firstName} 👋</p>
                 <p className="text-lg opacity-70 my-1">Let's start something new</p>
             </div>
@@ -45,7 +45,7 @@ const Instructor = () => {
                 <div className="mt-10">
                     <div className="flex flex-col-reverse lg:flex-row justify-between gap-5">
                         <InstructorChart courses={instructorData} />
-                        <div className="bg-[#161515] p-10 w-full lg:w-[30%]  my-4 rounded">
+                        <div className="bg-[#161515] p-10  lg:w-[30%]  m-4 rounded">
                             <p className="text-2xl mb-6">Statistics</p>
                             <div className="flex gap-5 my-2">
                                 <p>Total Courses</p>
