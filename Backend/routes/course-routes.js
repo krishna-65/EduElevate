@@ -5,6 +5,7 @@ const { createSection, updateSection, deleteSection } = require('../controllers/
 const { createSubSection, updateSubsection, deleteSubsection } = require('../controllers/sub-section-controllers');
 const { createRatingAndReview, getAverageRating, getAllRatingAndReview } = require('../controllers/ratingAndReveiw-controller');
 const { showCategory, categoryPageDetails, createCategory } = require('../controllers/category-controllers');
+const mailSender = require('../utils/mailSender');
 const router = express.Router();
 
 router.post('/createCourse',auth,isInstructor,createCourse);
@@ -30,4 +31,7 @@ router.post('/getInstructorCourses',auth,isInstructor,getInstructorCourses);
 router.post('/createRating',auth,isStudent,createRatingAndReview);
 router.get('/getAverageRating',auth,isStudent,getAverageRating);
 router.get('/getReview',auth,isStudent,getAllRatingAndReview);
+
+
+
 module.exports = router;

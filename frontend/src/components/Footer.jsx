@@ -83,7 +83,7 @@ const Footer = () =>{
                                                     <h2 className="text-[#d7dae4] mb-3">{section.title}</h2>
                                                     <div className="flex flex-col gap-2" >
                                                     {section.links.map((link,index)=>(
-                                                        <Link className="text-[#6e727f] text-sm " to={link.link}>{link.title}</Link>
+                                                        <Link key={index} className="text-[#6e727f] text-sm " to={link.link}>{link.title}</Link>
                                                         ))}
                                                     </div>
                                         </div>))}

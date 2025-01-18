@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {  getCategoryPageDetails } from "../services/operations/courseAPI";
 import CourseCart from "../components/common/CourseCart";
 import Footer from "../components/Footer";
+import Loader from "../components/common/Loader";
 
 const Catalog = ()=>{
    
@@ -27,12 +28,15 @@ const Catalog = ()=>{
           );
           setSelectedCategory(filteredCategory[0]);
     },[name])
+
+    const [loading,setLoading] = useState(false);
     
    useEffect(()=>{
        const getCourses = async()=>{  
+        setLoading(true);
         const  response = await getCategoryPageDetails(selectedCategory._id);
-        console.log(response);
         setCourses(response);
+        setLoading(false);
        }
        getCourses();
    },[selectedCategory]);
@@ -47,12 +51,13 @@ const Catalog = ()=>{
                     <span className="text-[#6674CC] text-lg leading-10 font-semibold">{selectedCategory?.name}</span>
                     <p className="text-gray-400 text-lg">{selectedCategory?.description}</p>
             </div>
-            {
-                courses &&
+           {
+            loading ?( <Loader/>) :
+            courses &&
               <>  <div className="p-10">
                     <p className="text-2xl font-semibold">{selectedCategory?.name}</p>
                     {courses?.selectCategoryCourses?.course.length>0? (
-                    <div className=" mx-auto grid lg:grid-cols-2 grid-cols-1 xl:grid-cols-3 gap-8 py-10 text-white rounded-3xl bg-red-400">
+                    <div className=" mx-auto grid lg:grid-cols-2 grid-cols-1 xl:grid-cols-3 gap-8 py-10 text-white rounded-3xl">
                   {  courses.selectCategoryCourses.course.map((c, index) => (
                         <CourseCart key={index} data={c} />
                     ))}
@@ -75,8 +80,8 @@ const Catalog = ()=>{
                 
                 </div>
                 </div>
-           </>
-            }
+               </> 
+           }
         <Footer/>
         </>
     )
