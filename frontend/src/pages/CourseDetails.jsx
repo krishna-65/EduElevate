@@ -85,10 +85,10 @@ const CourseDetails = () =>{
           alt={course?.courseName}
         />
         <h3 className="text-2xl text-white">RS. {course?.price}</h3>
-        <button onClick={handleAddToCart} className={`${user.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-yellow-500 text-gray-900 font-semibold rounded hover:scale-95 transition-all duration-200 mt-4`}>
+        <button onClick={handleAddToCart} className={`${user?.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-yellow-500 text-gray-900 font-semibold rounded hover:scale-95 transition-all duration-200 mt-4`}>
           Add to cart
         </button>
-        <button className={`${user.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-transparent border-blue-700 border-2 font-semibold rounded hover:scale-95 transition-all duration-200 mt-2`}>
+        <button className={`${user?.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-transparent border-blue-700 border-2 font-semibold rounded hover:scale-95 transition-all duration-200 mt-2`}>
           Buy now
         </button>
 
