@@ -57,7 +57,8 @@ const CourseDetails = () =>{
     }, [course]);
  
     const handleAddToCart = () =>{
-      console.log("hi");
+            if(!user)  enqueueSnackbar('For Adding Login First', {variant: 'error'});  
+            else
             dispatch(addToCart({course,enqueueSnackbar}));
     }
     if(loading) return <Loader/>;
