@@ -11,7 +11,7 @@ const Instructor = () => {
     const [instructorData, setInstructorData] = useState(null);
     const [courses, setCourses] = useState([]);
     const { user } = useSelector((state) => state.profile);
-    console.log(user);
+
     useEffect(() => {
         const getCourseDataWithStats = async () => {
             setLoading(true);
@@ -19,6 +19,7 @@ const Instructor = () => {
                 const instructorApiData = await getInstructorData(enqueueSnackbar);
                 if (instructorApiData) {
                     setInstructorData(instructorApiData);
+                    setCourses(instructorApiData); // Assuming course data is directly available
                 }
             } catch (error) {
                 enqueueSnackbar(error?.message || "Unable to fetch courses", { variant: "error" });
@@ -36,57 +37,57 @@ const Instructor = () => {
     }
 
     return (
-        <div>
+        <div className="bg-[#101010] min-h-screen p-6 lg:p-12">
             <div className="mx-3">
-                <p className="text-xl font-semibold">Hi {user?.firstName} 👋</p>
-                <p className="text-lg opacity-70 my-1">Let's start something new</p>
+                <p className="text-2xl font-semibold text-white">Hi {user?.firstName} 👋</p>
+                <p className="text-lg opacity-70 text-white mt-1">Let's start something new!</p>
             </div>
             {instructorData && instructorData.length > 0 ? (
-                <div className="mt-10">
-                    <div className="flex flex-col-reverse lg:flex-row justify-between gap-5">
+                <div className="mt-10 flex flex-col lg:flex-row gap-10">
+                
                         <InstructorChart courses={instructorData} />
-                        <div className="bg-[#161515] p-10  lg:w-[30%]  m-4 rounded">
-                            <p className="text-2xl mb-6">Statistics</p>
-                            <div className="flex gap-5 my-2">
+                
+
+                    {/* Instructor Statistics Section */}
+                    <div className="lg:w-[30%] bg-[#161515] p-6 rounded-xl shadow-lg">
+                        <p className="text-2xl font-semibold text-white mb-6">Statistics</p>
+                        <div className="text-white mb-4">
+                            <div className="flex justify-between mb-2">
                                 <p>Total Courses</p>
                                 <p>{instructorData?.length || 0}</p>
-                            </div> 
-                            <div className="flex gap-5 my-2">
+                            </div>
+                            <div className="flex justify-between mb-2">
                                 <p>Total Students</p>
                                 <p>{instructorData?.totalStudentsEnrolled || 0}</p>
                             </div>
-                            <div className="flex gap-5 my-2">
+                            <div className="flex justify-between mb-4">
                                 <p>Total Income</p>
                                 <p>Rs {instructorData?.totalAmountGenerated || 0}</p>
                             </div>
-                            <div>
-                        <div>
-                            <h3 className="my-5 text-lg">Your Courses</h3>
-                            <Link to="/dashboard/my-courses" className="px-7 py-2 bg-yellow-500 text-gray-700 rounded font-semibold hver:scale-95 transition-all duration-200">View All</Link>
                         </div>
-                        {courses.slice(0, 3).map((course, index) => (
-                            <div key={index}>
-                                <img src={course.thumbnail} alt={course.courseName} />
-                                <div>
-                                    <p>{course.courseName}</p>
-                                    <div>
-                                        <p>{course.studentsEnrolled?.length || 0} Students</p>
-                                        <p> | </p>
-                                        <p>Rs {course.price}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                             </div>
+
+                        {/* Your Courses Section */}
+                        <div>
+                            <h3 className="text-lg font-semibold text-white mb-4">Your Courses</h3>
+                            <Link
+                                to="/dashboard/my-courses"
+                                className="px-6 py-3 bg-yellow-500 text-gray-700 rounded-full hover:bg-yellow-600 transition-all duration-200 mb-4 block text-center"
+                            >
+                                View All
+                            </Link>
+                           
                         </div>
                     </div>
-
-                 
                 </div>
             ) : (
-                <div>
-                    <p>You have not created any course yet</p>
-                    <Link to="/dashboard/add-course">Create a course</Link>
+                <div className="text-center text-white mt-10">
+                    <p>You have not created any course yet.</p>
+                    <Link
+                        to="/dashboard/add-course"
+                        className="mt-4 px-6 py-3 bg-yellow-500 text-gray-700 rounded-full hover:bg-yellow-600 transition-all duration-200"
+                    >
+                        Create a Course
+                    </Link>
                 </div>
             )}
         </div>

@@ -2,7 +2,6 @@ import { div } from "framer-motion/client"
 import { Link } from "react-router-dom";
 
 const CourseCart = ({data,style})=>{
-    console.log(data);
     return(
         <Link to={`/catalog/${data?.courseName.split(" ").join("-")}/${data._id}`} className="w-full mx-auto  rounded-3xl bg-[#1b1d1c] shadow p-2 flex flex-col justify-between hover:scale-95 transition-all duration-200"
         style={style}>

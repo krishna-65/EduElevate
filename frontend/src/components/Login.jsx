@@ -11,12 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../services/operations/authAPI';
 import { enqueueSnackbar } from 'notistack';
 import Loader from './common/Loader';
+import { auth, provider, signInWithPopup } from '../services/firebase';
 const LoginComponent = ({backgroundColor,textColor}) => {
 
     useEffect(()=>{
         Aos.init({duration:1000})
     },[])
-    const {loading} = useSelector((state)=>state.auth);
+    const [loading,SetLoading] = useState(false);
     const [mousePos,setMousePos] = useState({x: 0, y: 0});
     const [isHovering, setIsHovering] = useState(false);
 
@@ -55,7 +56,6 @@ const LoginComponent = ({backgroundColor,textColor}) => {
 
         const handleSubmit = async(e) => {
             e.preventDefault();
-            console.log(formData)
            dispatch(login(formData,navigate,enqueueSnackbar))
         }
 
@@ -63,6 +63,22 @@ const LoginComponent = ({backgroundColor,textColor}) => {
             return <Loader/>
         }
 
+        
+// const handleGoogleLogin = async () => {
+//     try {
+//       const result = await signInWithPopup(auth, provider);
+//       const user = result.user;
+  
+//       // You can send user info to your backend or Redux
+//       enqueueSnackbar(`Welcome ${user.displayName}`, { variant: "success" });
+  
+//       // Redirect
+//       navigate('/');
+//     } catch (error) {
+//       console.error("Google login error", error);
+//       enqueueSnackbar("Google Sign-In Failed", { variant: "error" });
+//     }
+//   };
   return (
     <div className={`min-h-screen bg-[#0f0f0f] ${backgroundColor}`}>
 
@@ -106,7 +122,8 @@ const LoginComponent = ({backgroundColor,textColor}) => {
                     <h2 className="text-xl sm:text-3xl font-bold mb-6">Secure Access Made Simple</h2>
 
                     
-                    <button className="w-full flex text-sm sm:text-md items-center justify-center bg-white text-black py-3 rounded-md mb-4">
+                    <button className="w-full flex text-sm sm:text-md items-center justify-center bg-white text-black py-3 rounded-md mb-4"
+                    >
                         <FcGoogle className='inline-block mr-1 sm:mr-2 text-lg'/>
                         Continue with Google
                     </button>

@@ -14,6 +14,8 @@ import { setSignupData } from '../store/reducers/auth-reducer';
 import Loader from './common/Loader';
 import { TbEyeClosed } from 'react-icons/tb';
 
+import { auth, provider, signInWithPopup } from '../services/firebase';
+
 const SignupComponent = ({backgroundColor,textColor}) => {
 
     useEffect(()=>{
@@ -83,6 +85,26 @@ const SignupComponent = ({backgroundColor,textColor}) => {
              setLoading(false);
         }
        
+        const handleGoogleLogin = async () => {
+            try {
+              const result = await signInWithPopup(auth, provider);
+              const user = result.user;
+          
+              // Optionally save to Redux
+              dispatch(setSignupData({
+                firstName: user.displayName.split(" ")[0],
+                lastName: user.displayName.split(" ")[1] || '',
+                email: user.email,
+                accountType: "Student",
+              }));
+          
+              enqueueSnackbar("Google Sign-in successful!", { variant: "success" });
+              navigate('/dashboard'); // or wherever you want
+            } catch (error) {
+              enqueueSnackbar("Google Sign-in failed", { variant: "error" });
+              console.error(error);
+            }
+          };
 
         if(loading) return <Loader/>
 
@@ -145,13 +167,13 @@ const SignupComponent = ({backgroundColor,textColor}) => {
                         </div>
 
                     
-                    <button className="w-full flex text-sm sm:text-md items-center justify-center bg-white text-black py-3 rounded-md mb-4">
+                    <button className="w-full flex text-sm sm:text-md items-center justify-center bg-white text-black py-3 rounded-md mb-4"
+                          onClick={handleGoogleLogin}>
                         <FcGoogle className='inline-block mr-2 text-lg'/>
                         Continue with Google
                     </button>
                     
                     <button className="w-full flex items-center text-sm sm:text-md justify-center bg-[#333] text-white py-3 rounded-md mb-4">
-                    
                         Continue with GitHub
                     </button>
 

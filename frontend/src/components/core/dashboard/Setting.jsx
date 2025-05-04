@@ -103,7 +103,7 @@ const Setting = () => {
 if(loading) return <Loader/>
 
   return (
-    <div >
+    <div className="p-3">
       <h2>Edit Profile</h2>
 
       {/* Profile Picture Section */}

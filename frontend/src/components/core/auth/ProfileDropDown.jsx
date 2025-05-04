@@ -17,7 +17,7 @@ const ProfileDropDown = () => {
   };
 
   const user = useSelector((state) => state.profile.user);
-  console.log(user);
+ 
 
   // Close dropdown when clicking outside
   const handleClose = (e) => {
