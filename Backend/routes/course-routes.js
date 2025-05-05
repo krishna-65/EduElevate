@@ -27,6 +27,7 @@ router.get('/getCategoryPageDetails',categoryPageDetails);
 
 
 
+
 router.post('/getInstructorCourses',auth,isInstructor,getInstructorCourses);
 router.post('/createRating',auth,isStudent,createRatingAndReview);
 router.get('/getAverageRating',auth,isStudent,getAverageRating);

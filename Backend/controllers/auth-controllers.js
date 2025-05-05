@@ -7,8 +7,9 @@ const Profile = require('../models/Profile');
 const mailSender = require('../utils/mailSender');
 const crypto = require('crypto');
 require('dotenv').config();
-const firebasseFile = process.env.FIREBASE_SERVICE_ACCOUNT//require("../config/firebase-service-account.json")
-require('dotenv').config();
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+
 
 //send OTP
 exports.sendOTP = async ( req, res ) => {
@@ -289,7 +290,7 @@ exports.changedPassword = async (req, res)=>{
 
 const admin = require("firebase-admin");
 admin.initializeApp({
-  credential: admin.credential.cert(firebasseFile)
+  credential: admin.credential.cert(serviceAccount)
 });
 
 
