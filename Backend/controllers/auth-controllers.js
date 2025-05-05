@@ -6,7 +6,8 @@ const bcrypt = require('bcryptjs');
 const Profile = require('../models/Profile');
 const mailSender = require('../utils/mailSender');
 const crypto = require('crypto');
-const firebasseFile = require("../config/firebase-service-account.json")
+require('dotenv').config();
+const firebasseFile = process.env.FIREBASE_SERVICE_ACCOUNT//require("../config/firebase-service-account.json")
 require('dotenv').config();
 
 //send OTP
