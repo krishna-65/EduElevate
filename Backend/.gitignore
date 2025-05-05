@@ -1,2 +1,8 @@
-.env
+# Ignore node_modules in all directories
 node_modules/
+
+# Ignore all .env files
+.env
+
+# Ignore Firebase service account credentials
+config/firebase-service-account.json
