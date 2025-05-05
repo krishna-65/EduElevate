@@ -8,13 +8,14 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendOtp } from '../services/operations/authAPI';
+import { googleLogin, googleSignup, sendOtp } from '../services/operations/authAPI';
 import { useSnackbar } from 'notistack';
 import { setSignupData } from '../store/reducers/auth-reducer';
 import Loader from './common/Loader';
 import { TbEyeClosed } from 'react-icons/tb';
 
 import { auth, provider, signInWithPopup } from '../services/firebase';
+import axios from 'axios';
 
 const SignupComponent = ({backgroundColor,textColor}) => {
 
@@ -86,25 +87,18 @@ const SignupComponent = ({backgroundColor,textColor}) => {
         }
        
         const handleGoogleLogin = async () => {
-            try {
+           
               const result = await signInWithPopup(auth, provider);
               const user = result.user;
           
-              // Optionally save to Redux
-              dispatch(setSignupData({
-                firstName: user.displayName.split(" ")[0],
-                lastName: user.displayName.split(" ")[1] || '',
-                email: user.email,
-                accountType: "Student",
-              }));
-          
-              enqueueSnackbar("Google Sign-in successful!", { variant: "success" });
-              navigate('/dashboard'); // or wherever you want
-            } catch (error) {
-              enqueueSnackbar("Google Sign-in failed", { variant: "error" });
-              console.error(error);
-            }
+              // Get the ID token from Firebase
+              const token = await user.getIdToken();
+              await dispatch(googleSignup({ token, accountType: formData.accountType , navigate, enqueueSnackbar}));
+
+              
+            
           };
+          
 
         if(loading) return <Loader/>
 
@@ -173,9 +167,9 @@ const SignupComponent = ({backgroundColor,textColor}) => {
                         Continue with Google
                     </button>
                     
-                    <button className="w-full flex items-center text-sm sm:text-md justify-center bg-[#333] text-white py-3 rounded-md mb-4">
+                    {/* <button className="w-full flex items-center text-sm sm:text-md justify-center bg-[#333] text-white py-3 rounded-md mb-4">
                         Continue with GitHub
-                    </button>
+                    </button> */}
 
                     <div className="flex items-center my-4">
                         <hr className="flex-grow border-gray-600" />

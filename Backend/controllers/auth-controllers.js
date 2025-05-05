@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Profile = require('../models/Profile');
 const mailSender = require('../utils/mailSender');
+const crypto = require('crypto');
+const firebasseFile = require("../config/firebase-service-account.json")
 require('dotenv').config();
 
 //send OTP
@@ -49,7 +51,7 @@ exports.sendOTP = async ( req, res ) => {
 
                 //create an entry in database for otp
                 const otpBody = await OTP.create(otpPayload);
-                console.log("otp created", otpPayload);
+              
 
                 return res.status(200).json({
                     success: true,
@@ -284,3 +286,132 @@ exports.changedPassword = async (req, res)=>{
     }
 }
 
+const admin = require("firebase-admin");
+admin.initializeApp({
+  credential: admin.credential.cert(firebasseFile)
+});
+
+
+exports.googleSignup = async (req, res) => {
+    try {
+      const { token, accountType } = req.body;
+      if (!token) {
+        return res.status(400).json({ success: false, message: "No token provided" });
+      }
+  
+      // Verify token using Firebase Admin
+      const decoded = await admin.auth().verifyIdToken(token);
+      const { email, name, picture, uid } = decoded;
+  
+      // Check if user exists
+      let user = await User.findOne({ email });
+  
+      if (!user) {
+        // Split name into first and last names
+        const [firstName, lastName] = name.split(" ");
+  
+        // Generate a random password
+        const generatedPassword = crypto.randomBytes(8).toString('hex'); // Generate a random 16-character password
+  
+        // Hash the generated password
+        const hashedPassword = await bcrypt.hash(generatedPassword, 10);
+  
+        // Create the user's profile
+        const profile = await Profile.create({
+          gender: null,
+          dateOfBirth: null,
+          about: null,
+          contactNumber: null,
+        });
+  
+        // Create the user
+        user = await User.create({
+          firstName,
+          lastName: lastName || "",
+          email,
+          password: hashedPassword,  // Save the hashed password
+          accountType: accountType || "Student", // Use 'Student' as default if no accountType is provided
+          additionalDetails: profile._id,
+          image: picture || `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
+          courseProgress: [],
+        });
+  
+        // Send the verification email with the generated password
+        const emailContent = `This is your account password : ${generatedPassword}`
+        await mailSender(email, "Successfully Created Your Account at Eduelevate", emailContent);
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: "Google signup successful",
+        user,
+      });
+    } catch (err) {
+      return res.status(500).json({
+        success: false,
+        message: "Google signup failed",
+        error: err.message,
+      });
+    }
+  };
+
+
+exports.googlelogin = async (req, res) => {
+  try {
+    const { token, accountType } = req.body;
+    if (!token) {
+      return res.status(400).json({ success: false, message: "No token provided" });
+    }
+
+    // Verify Firebase token
+    const decoded = await admin.auth().verifyIdToken(token);
+    const { email, name, picture } = decoded;
+
+    // Check if user exists
+    let user = await User.findOne({ email }).populate("additionalDetails");
+
+    // If not, create a new user
+    if(!user) {
+        return res.status(401).json({
+            success: false,
+            message: 'User is not registered, please signup first',
+        });
+    }
+   
+   
+    // Generate token and cookie
+    const payload = {
+      email: user.email,
+      id: user._id,
+      accountType: user.accountType,
+    };
+
+    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
+
+    user.token = jwtToken;
+    user.password = undefined;
+
+    const options = {
+      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    };
+
+    res.cookie("token", jwtToken, options).status(200).json({
+      success: true,
+      message: "Google login successful",
+      user,
+      token: jwtToken,
+      expiresTime: Date.now() + 2 * 60 * 60 * 1000,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Google login failed",
+      error: err.message,
+    });
+  }
+};

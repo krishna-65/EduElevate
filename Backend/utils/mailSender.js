@@ -23,6 +23,7 @@ const mailSender = async (email,title,body) =>{
         catch(error){
             console.log('Error sending otp',error)
     }
+    
    
 }
 module.exports = mailSender;

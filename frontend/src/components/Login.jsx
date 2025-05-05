@@ -8,10 +8,11 @@ import Aos from 'aos';
 import 'aos/dist/aos.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../services/operations/authAPI';
+import { googleLogin, login } from '../services/operations/authAPI';
 import { enqueueSnackbar } from 'notistack';
 import Loader from './common/Loader';
 import { auth, provider, signInWithPopup } from '../services/firebase';
+import axios from 'axios';
 const LoginComponent = ({backgroundColor,textColor}) => {
 
     useEffect(()=>{
@@ -63,6 +64,19 @@ const LoginComponent = ({backgroundColor,textColor}) => {
             return <Loader/>
         }
 
+        const handleGoogleLogin = async () => {
+          
+              const result = await signInWithPopup(auth, provider);
+              const user = result.user;
+          
+              // Get the ID token from Firebase
+              const token = await user.getIdToken();
+              dispatch(googleLogin(token,navigate,enqueueSnackbar));
+         
+             
+            
+          };
+          
         
 // const handleGoogleLogin = async () => {
 //     try {
@@ -123,15 +137,15 @@ const LoginComponent = ({backgroundColor,textColor}) => {
 
                     
                     <button className="w-full flex text-sm sm:text-md items-center justify-center bg-white text-black py-3 rounded-md mb-4"
-                    >
+                    onClick={handleGoogleLogin}>
                         <FcGoogle className='inline-block mr-1 sm:mr-2 text-lg'/>
                         Continue with Google
                     </button>
                     
-                    <button className="w-full flex items-center text-sm sm:text-md justify-center bg-[#333] text-white py-3 rounded-md mb-4">
+                    {/* <button className="w-full flex items-center text-sm sm:text-md justify-center bg-[#333] text-white py-3 rounded-md mb-4">
                     
                         Continue with GitHub
-                    </button>
+                    </button> */}
 
                     <div className="flex items-center my-4">
                         <hr className="flex-grow border-gray-600" />

@@ -7,6 +7,8 @@ export const authEndpoints = {
   SIGNUP_API: BASE_URL + "/auth/signup",
   LOGIN_API: BASE_URL + "/auth/login",
   LOGOUT_API:BASE_URL + "/auth/logout",
+  GOOGLE_LOGIN_API: BASE_URL + "/auth/google-login",
+  GOOGLE_SINGUP_API: BASE_URL + "/auth/google-signup",
   RESETPASSTOKEN_API: BASE_URL + "/auth/reset-password-token",
   RESETPASSWORD_API: BASE_URL + "/auth/reset-password",
  

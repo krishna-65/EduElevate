@@ -47,7 +47,7 @@ const handleMouseEnter = () => {
   };
 
 
-   const gradientStyle = isHovering ?
+const gradientStyle = isHovering ?
                             { background: `radial-gradient(circle at ${mousePos.x}% ${mousePos.y}%, #382927, #0f0f0f, #010101)`}
                             : {};
 
@@ -64,8 +64,14 @@ const handleMouseEnter = () => {
             >
                     <h2 className="text-center font-semibold text-4xl">Courses</h2>
                    <div className=" mx-auto grid lg:grid-cols-2 grid-cols-1 xl:grid-cols-3 gap-8 py-10 text-white rounded-3xl">
-            {course && course.map((data)=><CourseCart data={data}
-            style={gradientStyle}/>)}
+                   {course && course.map((data, index) => (
+                  <CourseCart
+                    key={index} // Fallback (not ideal)
+                    data={data}
+                    style={gradientStyle}
+                  />
+                ))}
+
                 </div>
             </div>
 

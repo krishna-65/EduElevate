@@ -7,6 +7,7 @@ const {
     SENDOTP_API
 }    = authEndpoints;
 import {  useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export const sendOtp = (email,navigate,enqueueSnackbar) =>{
 
@@ -23,8 +24,8 @@ export const sendOtp = (email,navigate,enqueueSnackbar) =>{
                         email,
                         checkUserPresent:true,
                     })
-                    console.log("Send OTP API response..........", response)
-                    console.log(response.data.success)
+                   // console.log("Send OTP API response..........", response)
+                    //console.log(response.data.success)
 
                     if(!response.data.success){
                         throw new Error(response.data.message);
@@ -34,7 +35,7 @@ export const sendOtp = (email,navigate,enqueueSnackbar) =>{
                     enqueueSnackbar('OTP Sent Successfully',{variant: 'success', autoHideDuration:2000})
                 
                 }catch(error){
-                    console.log("Send OTP API error........", error);
+                   // console.log("Send OTP API error........", error);
                     enqueueSnackbar(error.response.data.message, {variant: "error", autoHideDuration:2000})
                 }
                 dispatch(setLoading(false));
@@ -56,7 +57,7 @@ export const sigUp =
                 const response = await apiConnector('POST',authEndpoints.SIGNUP_API,{
                     formData
                 })
-                console.log("Signup API Response......", response)
+                //console.log("Signup API Response......", response)
 
                 if(!response.data.success){
                     throw new Error(response.data.message);
@@ -64,7 +65,7 @@ export const sigUp =
                 enqueueSnackbar(response?.data?.message||"Signup Success", {varient:"success"}) 
                 navigate('/login')
             }catch(error){
-                 console.log("Signup API Error....", error);
+                // console.log("Signup API Error....", error);
                 enqueueSnackbar(error?.data?.message||"Signup Failed", {varient:"error"})
               
             }
@@ -88,7 +89,7 @@ export const login = (formData, navigate, enqueueSnackbar) => {
           password
         },);
   
-        console.log("Login API Response.....", response);
+       // console.log("Login API Response.....", response);
         
         if (!response.data.success) {
           throw new Error(response.data.message);
@@ -105,7 +106,7 @@ export const login = (formData, navigate, enqueueSnackbar) => {
         navigate('/dashboard');
   
       } catch (error) {
-        console.log("Login API Error....", error);
+       // console.log("Login API Error....", error);
         enqueueSnackbar(error?.data?.message || "Login Failed", { variant: "error" });
         navigate('/login');
       }
@@ -116,12 +117,87 @@ export const login = (formData, navigate, enqueueSnackbar) => {
   };
 
 
+  export const googleLogin = (token, navigate, enqueueSnackbar) => {
+    return async (dispatch) => {
+      dispatch(setLoading(true));
+      enqueueSnackbar("Logging in with Google...", { variant: "info" });
+  
+      try {
+        // Call backend API with Firebase token and accountType
+        const response = await  apiConnector("POST", authEndpoints.GOOGLE_LOGIN_API, {
+            token,
+           
+          });
+        //  axios.post("http://localhost:8000/api/v1/auth/google-login",{
+        //     token,
+        // })
+       
+  
+       // console.log("Google Login Response:", response);
+  
+        if (!response.data.success) {
+          throw new Error(response.data.message);
+        }
+  
+        enqueueSnackbar(response?.data?.message || "Login Success", { variant: "success" });
+  
+        // Update Redux state
+        dispatch(setIsauthenticate({
+          isauthenticate: true,
+          expireTime: response.data.expiresTime,
+        }));
+        dispatch(setUser(response.data.user));
+  
+        // Navigate to dashboard
+        navigate('/dashboard');
+      } catch (error) {
+       // console.error("Google Login Error:", error);
+        enqueueSnackbar(error?.response?.data?.message || "Google Login Failed", { variant: "error" });
+        navigate('/login');
+      }
+  
+      dispatch(setLoading(false));
+    };
+  };
+  
+  export const googleSignup = 
+(
+   {token,accountType,
+    navigate,
+    enqueueSnackbar}
+) => {
+    return(
+        async (dispatch) => {
+            enqueueSnackbar("Loading...", {varient:"info"})
+            dispatch(setLoading(true));
+            try{
+                const response = await apiConnector('POST',authEndpoints. GOOGLE_SINGUP_API,{
+                    token,
+                    accountType
+                })
+
+
+                if(!response.data.success){
+                    throw new Error(response.data.message);
+                }
+                enqueueSnackbar(response?.data?.message||"Signup Success", {varient:"success"}) 
+                navigate('/login')
+            }catch(error){
+                //  console.log("Signup API Error....", error);
+                enqueueSnackbar(error?.data?.message||"Signup Failed", {varient:"error"})
+              
+            }
+            dispatch(setLoading(false));
+            }
+    )
+}
+
 export const logout =  (navigate,enqueueSnackbar) => {
     return async(dispatch) => {
             dispatch(setLoading(true));
             try{
                 const response = await apiConnector('POST', authEndpoints.LOGOUT_API)
-                console.log("Logout API Response.....", response)
+                // console.log("Logout API Response.....", response)
                 if(!response.data.success){
                     throw new Error(response.data.message)
                 }
@@ -132,7 +208,7 @@ export const logout =  (navigate,enqueueSnackbar) => {
                 navigate('/login');
             }
             catch(error){
-                console.log("Logout API Error....", error);
+                // console.log("Logout API Error....", error);
                 enqueueSnackbar("Failed to Logout", {varient:"error"})
                 dispatch(setLoading(false));
             }
@@ -146,7 +222,7 @@ export const getPasswordResetToken = (email,setEmailSent,enqueueSnackbar) => {
             const response = await apiConnector('POST', authEndpoints. RESETPASSTOKEN_API,{
                 email
             })
-            console.log("Get Password Reset Token API Response.....", response)
+            // console.log("Get Password Reset Token API Response.....", response)
             if(!response.data.success){
                 throw new Error(response.data.message)
                 enqueueSnackbar(response.response.data.message , {varient:"error"})
@@ -157,7 +233,7 @@ export const getPasswordResetToken = (email,setEmailSent,enqueueSnackbar) => {
    
 
     }catch(error){
-        console.log("Get Password Reset Token API Error....", error);
+        // console.log("Get Password Reset Token API Error....", error);
         enqueueSnackbar("Failed to Send Reset Password Link", {varient:"error"})
         enqueueSnackbar(error.response.data.message , {varient:"error"})
     }
@@ -175,14 +251,14 @@ export const resetPassword = (formData, token, enqueueSnackbar) => {
                 confirmPassword,
                 token
             })
-            console.log("Reset Password API Response.....", response)
+            // console.log("Reset Password API Response.....", response)
             if(!response.data.success){
                 throw new Error(response.data.message)
             }
             enqueueSnackbar("Password Reset Successfully", {varient:"success"}) 
             navigate('/login')
             }catch(error){
-                console.log("Reset Password API Error....", error);
+                // console.log("Reset Password API Error....", error);
                 enqueueSnackbar("Failed to Reset Password", {variant:"error"})
                 enqueueSnackbar(error.response.data.message,{variant:"error"})
 
@@ -205,7 +281,7 @@ export const verifySession = () => {
         dispatch(setLoading(true)); // Start loading
         try {
             const response = await apiConnector("GET", profileEndpoints.GET_USER_DETAILS_API, {});
-            console.log("Verify Session API Response.....", response);
+            // console.log("Verify Session API Response.....", response);
 
             if (!response?.data?.success) {
                 throw new Error(response.data.message);
@@ -215,7 +291,7 @@ export const verifySession = () => {
             dispatch(setIsauthenticate({ isauthenticate: true, expireTime: null }));
             dispatch(setUser(response.data.user));
         } catch (error) {
-            console.error("Verify Session API Error....", error);
+            // console.error("Verify Session API Error....", error);
             // Update Redux state to mark as unauthenticated
             dispatch(setIsauthenticate({ isauthenticate: false }));
         } finally {

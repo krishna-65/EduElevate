@@ -30,11 +30,11 @@ export const getInstructorData = async(enqueueSnackbar) => {
         try{
             const response = await apiConnector('GET', profileEndpoints.GET_INSTRUCTOR_DATA_API,null)
             result = response?.data?.courses;
-            console.log(response?.data)
+           // console.log(response?.data)
             setCourse(result);
             return result;
         }catch(error){
-        console.log("GET_INSTRUCTOR_DATA_API Error",error);
+      //  console.log("GET_INSTRUCTOR_DATA_API Error",error);
         enqueueSnackbar(error?.message || "Error"  ,{variant:"error"});
         }
        
@@ -77,7 +77,7 @@ export const updateProfilePicture = async(data)=>{
         if(!response?.data?.success){
             throw new Error(response?.data?.message);
         }
-        console.log(response.data);
+       // console.log(response.data);
         setUser(response?.updatedUser);
         return response?.data;
     }catch(error){

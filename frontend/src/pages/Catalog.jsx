@@ -73,7 +73,7 @@ const Catalog = () => {
                         <p className="text-2xl font-semibold text-white mb-6">{selectedCategory?.name}</p>
                         {/* {courses?.selectCategoryCourses?.course.length > 0 ? */}
 
-                        {courses.length > 0 ? (
+                        {courses &&  courses.length > 0 ? (
                             <div className="mx-auto grid lg:grid-cols-2 grid-cols-1 xl:grid-cols-3 gap-8 py-10">
                                 {/* {courses.selectCategoryCourses.course.map((course, index) => (
                                     <CourseCart key={index} data={course} />

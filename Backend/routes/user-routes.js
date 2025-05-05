@@ -1,6 +1,6 @@
 
 const express = require('express');
-const { login, signUp, sendOTP, changedPassword, logout } = require('../controllers/auth-controllers');
+const { login, signUp, sendOTP, changedPassword, logout, googleSignup, googlelogin } = require('../controllers/auth-controllers');
 const { auth } = require('../middlewares/auth-middlewares');
 const { resetPasswordToken, resetPassword } = require('../controllers/reset-password-controller');
 const { ContactController } = require('../controllers/contact-controller');
@@ -10,7 +10,8 @@ const router = express.Router();
 router.post('/login',login);
 router.post('/signup',signUp);
 router.post('/logout',logout);
-
+router.post('/google-signup',googleSignup)
+router.post('/google-login',googlelogin)
 //send otp
 router.post('/sendotp', sendOTP);
 
