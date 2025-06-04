@@ -11,6 +11,7 @@ import { GiArrowCursor } from "react-icons/gi";
 import { CiMobile4 } from "react-icons/ci";
 import { GrCertificate } from "react-icons/gr";
 import { addToCart } from "../store/reducers/cart-reducers";
+import axios from "axios";
 const CourseDetails = () =>{
     const {user} = useSelector((state)=>state.profile);
     const {id} = useParams();
@@ -20,6 +21,80 @@ const CourseDetails = () =>{
     const [timeDuration,setTimeDuration] = useState(0);
     const [instructions,setInstructions] = useState([])
     const dispatch = useDispatch();
+
+    ///********Payment Gateway********** */
+  const options = {
+    key: "rzp_test_GQ6XaPC6gMPNwH",
+    amount: course?.price * 100, //  = INR 1
+    name: "",
+    description: 'some description',
+    image:
+      `${serverurl}/images/logo.png`, // add here your wensite logo ok
+    handler: async function (response) {
+      //  console.log("payment ki full detail ",response)
+      // alert(response.razorpay_payment_id);
+
+        // let body = {
+        //   productdetailid: item.productdetailid,
+        //   transitionid: response.razorpay_payment_id,
+        //   userid: userData?.userid,
+        //   addressid: userData?.item?.addressid,
+        //   qty: item.qty
+        // } // sun yha jo couse hai uska data set ker de jese mene apne project ka kiya hai or jo teri order table me column name hai vo vo likh de
+
+        let result = await axios.post("https://eduelevate-8s1p.onrender.com/api/v1/capturePayment",{
+          courseId: course._id,
+        });// yha api call ker diyo ye wali jo abi tune mujhe dikhai hai 
+ // see this is for adding the couse deatils in database 
+
+      navigate('/home')
+
+      //  let result = await postData('yourorder/fetch_orderid',{transitionid:response.razorpay_payment_id})  
+      //  alert(JSON.stringify(result?.data))
+      // productdetailidlist.map((item)=>{
+      //   let result = postData('yourorder/submit_orderedproduct',{})
+      // })
+
+    },
+    prefill: {
+      name: '',
+      contact: '',
+      email: ''
+    },
+    notes: {
+      address: "some address",
+    },
+    theme: {
+      color: "blue",
+      hide_topbar: false,
+    },
+  };
+
+  const handlePayment = async () => {
+    // console.log("helooooo",userkey)
+    if (!user){// this is for check that use login or not so apply condition according to your logic 
+      navigate('/login')
+    }else{
+          var rzp1 = new window.Razorpay(options);
+          rzp1.open();
+
+    }
+
+
+  };
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+
+
+  ////********************* */
+
+
     useEffect(()=>{
         const fetchCourse = async() => {
             setLoading(true);
@@ -29,7 +104,6 @@ const CourseDetails = () =>{
         }
         fetchCourse();
     },[]);
-
   
     useEffect(() => {
         if (course?.courseContent) {
@@ -89,9 +163,9 @@ const CourseDetails = () =>{
         <button onClick={handleAddToCart} className={`${user?.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-yellow-500 text-gray-900 font-semibold rounded hover:scale-95 transition-all duration-200 mt-4`}>
           Add to cart
         </button>
-        <button className={`${user?.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-transparent border-blue-700 border-2 font-semibold rounded hover:scale-95 transition-all duration-200 mt-2`}>
+        <button className={`${user?.accountType==="Instructor"?"opacity-50 pointer-events-none": "opacity-100"} px-7 py-2 bg-transparent border-blue-700 border-2 font-semibold rounded hover:scale-95 transition-all duration-200 mt-2`} onClick={handlePayment} >
           Buy now
-        </button>
+        </button> 
 
         <div className="mt-4">
           <h5 className="text-white my-3 text-lg">This course includes:</h5>
