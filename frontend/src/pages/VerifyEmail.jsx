@@ -1,118 +1,110 @@
-import React, { useState, useEffect } from "react";
-import Aos from "aos";
-import "aos/dist/aos.css";
-import Loader from "../components/common/Loader";
+import { useEffect, useState } from "react";
+import OtpInput from "react-otp-input";
+import { Link } from "react-router-dom";
+import { BiArrowBack } from "react-icons/bi";
+import { RxCountdownTimer } from "react-icons/rx";
 import { useDispatch, useSelector } from "react-redux";
-import { sigUp } from "../services/operations/authAPI";
-import { enqueueSnackbar } from "notistack";
-import { clearSignupData, setLoading } from "../store/reducers/auth-reducer";
+import { sendOtp, signUp } from "../services/operations/authAPI";
 import { useNavigate } from "react-router-dom";
 
-const OtpVerification = () => {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Array for 6-digit OTP
-  const {loading} = useSelector((state)=>state.auth);
-    const dispatch = useDispatch();
-   const navigate = useNavigate();
+function VerifyEmail() {
+  const [otp, setOtp] = useState("");
+  const { signupData, loading } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    Aos.init({ duration: 1000 });
+    // Only allow access of this route when user has filled the signup form
+    if (!signupData) {
+      navigate("/signup");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleInputChange = (index, value) => {
-    if (!/^\d*$/.test(value)) return; // Allow only numbers
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
+  const handleVerifyAndSignup = (e) => {
+    e.preventDefault();
+    const {
+      accountType,
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+    } = signupData;
 
-    // Automatically focus next input
-    if (value && index < otp.length - 1) {
-      const nextInput = document.getElementById(`otp-input-${index + 1}`);
-      nextInput && nextInput.focus();
-    }
+    dispatch(
+      signUp(
+        accountType,
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        otp,
+        navigate
+      )
+    );
   };
 
-  const handleKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      const prevInput = document.getElementById(`otp-input-${index - 1}`);
-      prevInput && prevInput.focus();
-    }
-  };
-
-  const data = useSelector((state)=> state.auth.signup);
-  console.log("data in signup component:", data);
-
-
- 
-  const handleOtpSubmit = (event) => {
-    event.preventDefault();
- 
-    if (!data) {
-        enqueueSnackbar('Signup data not found. Please try again.', { variant: 'error' });
-        navigate('/signup'); 
-        return;
-    }
-
-    const otpCode = otp.join("");
-  
-    const formData = { ...data, otp: otpCode };
-  
-    dispatch(sigUp(formData,navigate,enqueueSnackbar))
-      dispatch(clearSignupData()); 
-      // Clear signup data after success
-};
-
-if(loading){
-  return <Loader/>; // Return loading spinner when loading state is true
-}
   return (
-    <div className="min-h-screen bg-[#0f0f0f] flex items-center justify-center text-white">
-        {
-        loading ? (<Loader/>)
-        :(
-                <div
-                className="bg-[#1f1f1f] p-8 rounded-2xl shadow-lg w-11/12 max-w-md"
-                data-aos="fade-up"
+    <div className="min-h-[calc(100vh-3.5rem)] grid place-items-center">
+      {loading ? (
+        <div>
+          <div className="spinner"></div>
+        </div>
+      ) : (
+        <div className="max-w-[500px] p-4 lg:p-8">
+          <h1 className="text-richblack-5 font-semibold text-[1.875rem] leading-[2.375rem]">
+            Verify Email
+          </h1>
+          <p className="text-[1.125rem] leading-[1.625rem] my-4 text-richblack-100">
+            A verification code has been sent to you. Enter the code below
+          </p>
+          <form onSubmit={handleVerifyAndSignup}>
+            <OtpInput
+              value={otp}
+              onChange={setOtp}
+              numInputs={6}
+              renderInput={(props) => (
+                <input
+                  {...props}
+                  placeholder="-"
+                  style={{
+                    boxShadow: "inset 0px -1px 0px rgba(255, 255, 255, 0.18)",
+                  }}
+                  className="w-[48px] lg:w-[60px] border-0 bg-richblack-800 rounded-[0.5rem] text-richblack-5 aspect-square text-center focus:border-0 focus:outline-2 focus:outline-yellow-50"
+                />
+              )}
+              containerStyle={{
+                justifyContent: "space-between",
+                gap: "0 6px",
+              }}
+            />
+            <button
+              type="submit"
+              className="w-full bg-yellow-50 py-[12px] px-[12px] rounded-[8px] mt-6 font-medium text-richblack-900"
             >
-                <h2 className="text-2xl font-bold mb-4">Email Verification</h2>
-                <p className="text-gray-400 mb-6">
-                Enter the 6-digit code sent to your email.
-                </p>
-                <form onSubmit={handleOtpSubmit} className="space-y-6">
-                <div className="flex gap-2 justify-center">
-                    {otp.map((digit, index) => (
-                    <input
-                        key={index}
-                        id={`otp-input-${index}`}
-                        type="text"
-                        maxLength="1"
-                        value={digit}
-                        onChange={(e) => handleInputChange(index, e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        className="w-8 h-8 sm:w-12 sm:h-12 text-center inline-block text-xl rounded-md bg-[#333] border border-gray-500 focus:outline-none focus:border-blue-400"
-                    />
-                    ))}
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-[#6d2a9c] py-3 rounded-md font-semibold"
-                   
-                >
-                   Verify OTP
-                </button>
-                </form>
-                <p className="mt-4 text-center text-sm text-gray-400">
-                Didn't receive the code?{" "}
-                <button
-                    className="text-blue-400 hover:underline"
-                >
-                    Resend OTP
-                </button>
-                </p>
-            </div>
-        )
-        }
+              Verify Email
+            </button>
+          </form>
+          <div className="mt-6 flex items-center justify-between">
+            <Link to="/signup">
+              <p className="text-richblack-5 flex items-center gap-x-2">
+                <BiArrowBack /> Back To Signup
+              </p>
+            </Link>
+            <button
+              className="flex items-center text-blue-100 gap-x-2"
+              onClick={() => dispatch(sendOtp(signupData.email))}
+            >
+              <RxCountdownTimer />
+              Resend it
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}
 
-export default OtpVerification;
+export default VerifyEmail;

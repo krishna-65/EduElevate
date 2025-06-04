@@ -1,31 +1,29 @@
-const IconBtn = ({
+export default function IconBtn({
     text,
-    onClick,
+    onclick,
     children,
-    disable,
+    disabled,
     outline = false,
-    type = "button", // Default type for button
-    className,
-}) => {
+    customClasses,
+    type,
+  }) {
     return (
-        <button
-            onClick={onClick}
-            disabled={disable}
-            className={`${
-                outline ? "border border-gray-300" : ""
-            } px-4 py-2 rounded focus:outline-none disabled:opacity-50 ${className}`}
-            type={type}
-        >
-            {children ? (
-                <>
-                    <span>{text}</span>
-                    {children}
-                </>
-            ) : (
-                text // Render text directly
-            )}
-        </button>
-    );
-};
-
-export default IconBtn;
+      <button
+        disabled={disabled}
+        onClick={onclick}
+        className={`flex items-center ${
+          outline ? "border border-yellow-50 bg-transparent" : "bg-yellow-50"
+        } cursor-pointer gap-x-2 rounded-md py-2 px-5 font-semibold text-richblack-900 ${customClasses}`}
+        type={type}
+      >
+        {children ? (
+          <>
+            <span className={`${outline && "text-yellow-50"}`}>{text}</span>
+            {children}
+          </>
+        ) : (
+          text
+        )}
+      </button>
+    )
+  }
