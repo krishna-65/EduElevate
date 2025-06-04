@@ -12,4 +12,4 @@ function OpenRoute({ children }) {
   }
 }
 
-export default OpenRoute
+export default OpenRoute;
