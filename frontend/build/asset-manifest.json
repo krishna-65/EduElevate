@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.298bdfdd.css",
+    "main.js": "/static/js/main.4ed37a25.js",
+    "static/media/banner.mp4": "/static/media/banner.8e687823b1422880cc3f.mp4",
+    "static/media/FoundingStory.png": "/static/media/FoundingStory.84f2828a5f4a9c08a802.png",
+    "static/media/bghome.svg": "/static/media/bghome.354d9966c701455b23db.svg",
+    "static/media/rzp_logo.png": "/static/media/rzp_logo.db1cd7db1b52c2ed8e3d.png",
+    "static/media/frame.png": "/static/media/frame.3a238e5f26d676376e1d.png",
+    "static/media/signup.webp": "/static/media/signup.acaf50bcb11d9aec44b4.webp",
+    "static/media/login.webp": "/static/media/login.5eeb0b81544a40330d4b.webp",
+    "static/media/aboutus1.webp": "/static/media/aboutus1.86606deea209badf5925.webp",
+    "static/media/aboutus2.webp": "/static/media/aboutus2.0a1cd797ce3a69e81830.webp",
+    "static/media/aboutus3.webp": "/static/media/aboutus3.f5cfba861877ea03735d.webp",
+    "index.html": "/index.html",
+    "main.298bdfdd.css.map": "/static/css/main.298bdfdd.css.map",
+    "main.4ed37a25.js.map": "/static/js/main.4ed37a25.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.298bdfdd.css",
+    "static/js/main.4ed37a25.js"
+  ]
+}
